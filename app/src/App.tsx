@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowRight, ArrowUpRight, User, X, Cookie, Building } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, User, X, Cookie } from 'lucide-react';
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
