@@ -41,24 +41,30 @@ function App() {
   const aboutRef = useRef<HTMLDivElement>(null);
   const faqRef = useRef<HTMLDivElement>(null);
 
-  // Scroll and Parallax tracking
+  // Scroll and Parallax tracking (throttled with rAF for performance)
   useEffect(() => {
+    let rafId: number;
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-      setScrollY(window.scrollY);
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        setScrolled(window.scrollY > 50);
+        setScrollY(window.scrollY);
 
-      if (videoSectionRef.current) {
-        const rect = videoSectionRef.current.getBoundingClientRect();
-        const viewportHeight = window.innerHeight;
-        // Calculation: 0 when just entering, 1 when fully centered
-        let progress = (viewportHeight - rect.top) / (viewportHeight);
-        progress = Math.max(0, Math.min(1.2, progress)); // Extra headroom for completion
-        setVideoProgress(progress);
-      }
+        if (videoSectionRef.current) {
+          const rect = videoSectionRef.current.getBoundingClientRect();
+          const viewportHeight = window.innerHeight;
+          let progress = (viewportHeight - rect.top) / (viewportHeight);
+          progress = Math.max(0, Math.min(1.2, progress));
+          setVideoProgress(progress);
+        }
+      });
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      cancelAnimationFrame(rafId);
+    };
   }, []);
 
   // Section Observer
@@ -1058,6 +1064,7 @@ function App() {
               src="/images/hero-shape.png"
               alt="IUDEX"
               className="w-full h-auto"
+              fetchPriority="high"
             />
           </div>
         </div>
@@ -1427,7 +1434,8 @@ function App() {
             <img 
               src="/images/hero-shape.png" 
               alt="" 
-              className="w-[120%] h-auto object-contain blur-2xl rotate-12" 
+              className="w-[120%] h-auto object-contain blur-2xl rotate-12"
+              loading="lazy"
             />
           </div>
         </div>
@@ -1490,7 +1498,8 @@ function App() {
                 <img 
                   src="/images/hero-shape.png" 
                   alt="" 
-                  className="w-full h-full object-contain" 
+                  className="w-full h-full object-contain"
+                  loading="lazy"
                 />
               </div>
 
@@ -1763,7 +1772,7 @@ function App() {
           <div className="flex flex-col md:flex-row items-center justify-between gap-8">
             {/* Brand & Rights */}
             <div className="flex flex-col items-center md:items-start text-center md:text-left">
-              <img src="/images/tracking-logo.png" alt="IUDEX" className="h-16 w-auto mb-6 object-contain" />
+              <img src="/images/tracking-logo.png" alt="IUDEX" className="h-16 w-auto mb-6 object-contain" loading="lazy" />
               <div className="flex flex-col gap-1">
                 <div className="text-black/30 text-xs text-center md:text-left">
                   © 2026 IUDEX. Todos los derechos reservados.
