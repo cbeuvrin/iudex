@@ -83,7 +83,7 @@ function App() {
           }
         });
       },
-      { threshold: 0.15, rootMargin: '-50px' }
+      { threshold: 0.05, rootMargin: '0px' }
     );
 
     const sections = [heroRef, videoSectionRef, dataRef, featuresRef, securityRef, trackingRef, impactRef, aboutRef, faqRef];
@@ -919,7 +919,7 @@ function App() {
 
       {/* Cinematic Preloader Overlay */}
       <div 
-        className={`fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center transition-all duration-1000 ${
+        className={`fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center transition-all duration-500 ${
           introComplete ? 'opacity-0 pointer-events-none' : 'opacity-100'
         }`}
       >
@@ -927,7 +927,7 @@ function App() {
           <img 
             src="/images/preloader-logo.png" 
             alt="IUDEX Logo" 
-            className={`h-16 w-auto mx-auto mb-12 transition-all duration-1000 ${loadingProgress > 10 ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
+            className={`h-16 w-auto mx-auto mb-12 transition-all duration-500 ${loadingProgress > 10 ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
           />
           <div className="relative w-full h-[1px] bg-white/10 rounded-full overflow-hidden mb-4">
             <div 
@@ -1073,10 +1073,10 @@ function App() {
         <div className="absolute bottom-20 md:bottom-32 left-0 md:left-16 w-full md:max-w-4xl px-8 md:px-0 text-center md:text-left pointer-events-none">
           {/* Badge */}
           <div 
-            className={`flex items-center justify-center md:justify-start gap-3 mb-8 transition-all duration-1000 cubic-bezier(0.16, 1, 0.3, 1) ${
+            className={`flex items-center justify-center md:justify-start gap-3 mb-8 transition-all duration-500 cubic-bezier(0.16, 1, 0.3, 1) ${
               startMainAnims ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
             }`}
-            style={{ transitionDelay: '600ms' }}
+            style={{ transitionDelay: '0ms' }}
           >
             <div className="hidden md:block w-8 h-[1px] bg-black/40" />
             <span className="text-black/50 text-xs tracking-[0.2em] uppercase">Inteligencia Artificial</span>
@@ -1085,10 +1085,10 @@ function App() {
           <h1 className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-light tracking-tight mb-12">
             {/* Title Line 1 Wrapper (Entrance) */}
             <div 
-              className={`transition-all duration-1000 cubic-bezier(0.16, 1, 0.3, 1) ${
+              className={`transition-all duration-500 cubic-bezier(0.16, 1, 0.3, 1) ${
                 startMainAnims ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
               }`}
-              style={{ transitionDelay: '800ms' }}
+              style={{ transitionDelay: '100ms' }}
             >
               {/* Line 1 Content (Parallax) */}
               <span 
@@ -1100,10 +1100,10 @@ function App() {
             </div>
             {/* Title Line 2 Wrapper (Entrance) */}
             <div 
-              className={`transition-all duration-1000 cubic-bezier(0.16, 1, 0.3, 1) ${
+              className={`transition-all duration-500 cubic-bezier(0.16, 1, 0.3, 1) ${
                 startMainAnims ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
               }`}
-              style={{ transitionDelay: '1000ms' }}
+              style={{ transitionDelay: '200ms' }}
             >
               {/* Line 2 Content (Parallax) */}
               <span 
@@ -1117,10 +1117,10 @@ function App() {
 
           {/* Paragraph Wrapper (Entrance) */}
           <div
-            className={`transition-all duration-1000 cubic-bezier(0.16, 1, 0.3, 1) ${
+            className={`transition-all duration-500 cubic-bezier(0.16, 1, 0.3, 1) ${
               startMainAnims ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-16'
             }`}
-            style={{ transitionDelay: '1200ms' }}
+            style={{ transitionDelay: '300ms' }}
           >
             {/* Paragraph Content (Parallax) */}
             <div style={{ transform: `translateY(${window.innerWidth < 768 ? 0 : scrollY * -0.3}px)` }} className="flex flex-col items-center md:items-start">
@@ -1150,7 +1150,7 @@ function App() {
         className="relative py-16 sm:py-24 px-6 sm:px-12 md:px-16 bg-neutral-50"
       >
         <div
-          className={`relative z-10 w-full max-w-7xl mx-auto transition-all duration-1000 ${
+          className={`relative z-10 w-full max-w-7xl mx-auto transition-all duration-500 ${
             visibleSections.has('data') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
           }`}
         >
@@ -1179,7 +1179,7 @@ function App() {
               >
                 {/* Left: Stat */}
                 <div 
-                  className={`w-full md:w-32 lg:w-48 flex-shrink-0 transition-all duration-1000 cubic-bezier(0.16, 1, 0.3, 1) ${
+                  className={`w-full md:w-32 lg:w-48 flex-shrink-0 transition-all duration-500 cubic-bezier(0.16, 1, 0.3, 1) ${
                     visibleSections.has('data') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
                   }`}
                   style={{ transitionDelay: `${(index * 0.1) + 0.1}s` }}
@@ -1190,7 +1190,7 @@ function App() {
 
                 {/* Middle: Description */}
                 <div 
-                  className={`flex-1 transition-all duration-1000 cubic-bezier(0.16, 1, 0.3, 1) ${
+                  className={`flex-1 transition-all duration-500 cubic-bezier(0.16, 1, 0.3, 1) ${
                     visibleSections.has('data') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
                   }`}
                   style={{ transitionDelay: `${(index * 0.1) + 0.3}s` }}
@@ -1202,7 +1202,7 @@ function App() {
 
                 {/* Right: Source and Tags */}
                 <div 
-                  className={`w-full md:w-64 flex-shrink-0 flex flex-col items-start md:items-end text-left md:text-right transition-all duration-1000 cubic-bezier(0.16, 1, 0.3, 1) ${
+                  className={`w-full md:w-64 flex-shrink-0 flex flex-col items-start md:items-end text-left md:text-right transition-all duration-500 cubic-bezier(0.16, 1, 0.3, 1) ${
                     visibleSections.has('data') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
                   }`}
                   style={{ transitionDelay: `${(index * 0.1) + 0.5}s` }}
@@ -1244,7 +1244,7 @@ function App() {
           
           {/* Header Text (Now Centered) */}
           <div 
-            className="text-center mb-24 transition-all duration-1000"
+            className="text-center mb-24 transition-all duration-500"
             style={{ 
               opacity: Math.min(1, videoProgress * 1.2),
               transform: `translateY(${(1 - Math.min(1, videoProgress * 1.2)) * 40}px)`
@@ -1304,7 +1304,7 @@ function App() {
       <section
         id="features"
         ref={featuresRef}
-        className="relative flex flex-col pt-16 pb-16 px-8 md:px-16 bg-white overflow-hidden"
+        className="relative flex flex-col pt-16 pb-8 md:pb-16 px-8 md:px-16 bg-white overflow-hidden"
       >
         {/* Top Navigation-like labels */}
         <div className="w-full max-w-7xl mx-auto mb-20">
@@ -1316,25 +1316,25 @@ function App() {
 
         {/* Main Large Heading (Full Width) */}
         <div 
-          className={`w-full transition-all duration-1000 ${
+          className={`w-full transition-all duration-500 ${
             visibleSections.has('features') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
           }`}
         >
           <h2 className="text-4xl md:text-7xl lg:text-[110px] font-light leading-[1] tracking-tighter text-black w-full text-left">
             <span className="text-black">Redacta</span>{" "}
-            <span className={`transition-colors duration-1000 delay-500 ${visibleSections.has('features') ? 'text-black/10' : 'text-black'}`}>con precisión,</span> 
+            <span className={`transition-colors duration-500 delay-150 ${visibleSections.has('features') ? 'text-black/10' : 'text-black'}`}>con precisión,</span> 
             <span className="text-black"> resuelve</span>{" "}
-            <span className={`transition-colors duration-1000 delay-700 ${visibleSections.has('features') ? 'text-black/10' : 'text-black'}`}>consultas,</span> 
+            <span className={`transition-colors duration-500 delay-200 ${visibleSections.has('features') ? 'text-black/10' : 'text-black'}`}>consultas,</span> 
             <span className="text-black"> aprende</span>{" "}
-            <span className={`transition-colors duration-1000 delay-1000 ${visibleSections.has('features') ? 'text-black/10' : 'text-black'}`}>de cada caso y</span> 
+            <span className={`transition-colors duration-500 delay-250 ${visibleSections.has('features') ? 'text-black/10' : 'text-black'}`}>de cada caso y</span> 
             <span className="text-black"> protege</span>{" "}
-            <span className={`transition-colors duration-1000 delay-1000 ${visibleSections.has('features') ? 'text-black/10' : 'text-black'}`}>tu información sensible con absoluta seguridad.</span>
+            <span className={`transition-colors duration-500 delay-250 ${visibleSections.has('features') ? 'text-black/10' : 'text-black'}`}>tu información sensible con absoluta seguridad.</span>
           </h2>
         </div>
 
         {/* Middle Smaller Text (Right Aligned per user request) */}
         <div 
-          className={`w-full max-w-sm ml-auto text-right mt-20 mb-32 space-y-8 transition-all duration-1000 delay-300 ${
+          className={`w-full max-w-sm ml-auto text-right mt-12 md:mt-20 mb-8 md:mb-32 space-y-8 transition-all duration-500 delay-100 ${
             visibleSections.has('features') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
           }`}
         >
@@ -1349,7 +1349,7 @@ function App() {
               {/* Animated Line Move from Slider - Now full width and thicker */}
               <div className="relative h-[2px] bg-black/10 w-full overflow-hidden">
                 <div 
-                  className="absolute top-0 right-0 h-full bg-black/60 transition-all duration-[1500ms] delay-500"
+                  className="absolute top-0 right-0 h-full bg-black/60 transition-all duration-[1500ms] delay-150"
                   style={{ width: visibleSections.has('features') ? '100%' : '0%' }}
                 />
               </div>
@@ -1363,10 +1363,10 @@ function App() {
       <section
         id="security"
         ref={securityRef}
-        className="relative flex items-center py-16 sm:py-24 px-8 md:px-16 bg-white"
+        className="relative flex items-center pt-0 pb-16 sm:py-24 px-8 md:px-16 bg-white"
       >
         <div
-          className={`relative z-10 w-full max-w-7xl mx-auto transition-all duration-1000 ${
+          className={`relative z-10 w-full max-w-7xl mx-auto transition-all duration-500 ${
             visibleSections.has('security') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
           }`}
         >
@@ -1386,7 +1386,7 @@ function App() {
             {securityStandards.map((item, index) => (
               <div 
                 key={item.id} 
-                className={`border-b border-black/10 transition-all duration-1000 cubic-bezier(0.16, 1, 0.3, 1) ${
+                className={`border-b border-black/10 transition-all duration-500 cubic-bezier(0.16, 1, 0.3, 1) ${
                   visibleSections.has('security') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
                 }`}
                 style={{ transitionDelay: `${(index * 0.15) + 0.3}s` }}
@@ -1441,7 +1441,7 @@ function App() {
         </div>
 
         <div
-          className={`relative z-10 w-full max-w-7xl mx-auto transition-all duration-1000 ${
+          className={`relative z-10 w-full max-w-7xl mx-auto transition-all duration-500 ${
             visibleSections.has('tracking') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
           }`}
         >
@@ -1568,7 +1568,7 @@ function App() {
         className="relative flex items-center py-16 sm:py-24 px-8 md:px-16 bg-[#F9F9F8]"
       >
         <div 
-          className={`relative z-10 w-full max-w-7xl mx-auto transition-all duration-1000 ${
+          className={`relative z-10 w-full max-w-7xl mx-auto transition-all duration-500 ${
             visibleSections.has('impact') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
           }`}
         >
@@ -1596,7 +1596,7 @@ function App() {
                 ].map((stat, i) => (
                   <div 
                     key={i} 
-                    className={`flex items-start gap-8 group py-10 ${i !== 0 ? 'border-t border-black/10' : ''} transition-all duration-1000 ${
+                    className={`flex items-start gap-8 group py-10 ${i !== 0 ? 'border-t border-black/10' : ''} transition-all duration-500 ${
                       visibleSections.has('impact') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
                     }`}
                     style={{ 
@@ -1634,7 +1634,7 @@ function App() {
                 ].map((stat, i) => (
                    <div 
                     key={i} 
-                    className={`flex items-start gap-8 group py-10 ${i !== 0 ? 'border-t border-black/10' : ''} transition-all duration-1000 ${
+                    className={`flex items-start gap-8 group py-10 ${i !== 0 ? 'border-t border-black/10' : ''} transition-all duration-500 ${
                       visibleSections.has('impact') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
                     }`}
                     style={{ 
@@ -1665,7 +1665,7 @@ function App() {
         className="relative flex items-center py-16 sm:py-24 px-8 md:px-16 bg-white"
       >
         <div
-          className={`relative z-10 w-full max-w-7xl mx-auto transition-all duration-1000 ${
+          className={`relative z-10 w-full max-w-7xl mx-auto transition-all duration-500 ${
             visibleSections.has('about') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
           }`}
         >
@@ -1676,7 +1676,7 @@ function App() {
           </div>
 
           <div className="text-center mb-20 overflow-hidden">
-            <h2 className={`text-4xl md:text-5xl lg:text-6xl font-light mb-8 transition-all duration-1000 cubic-bezier(0.16, 1, 0.3, 1) ${
+            <h2 className={`text-4xl md:text-5xl lg:text-6xl font-light mb-8 transition-all duration-500 cubic-bezier(0.16, 1, 0.3, 1) ${
               visibleSections.has('about') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
             }`}>
               Construyendo el <span className="text-black/50">futuro del</span> Derecho.
@@ -1684,13 +1684,13 @@ function App() {
           </div>
 
           <div className="max-w-3xl mx-auto text-center">
-            <p className={`text-xl text-black/60 leading-relaxed mb-12 text-center transition-all duration-1000 cubic-bezier(0.16, 1, 0.3, 1) ${
+            <p className={`text-xl text-black/60 leading-relaxed mb-12 text-center transition-all duration-500 cubic-bezier(0.16, 1, 0.3, 1) ${
               visibleSections.has('about') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
             }`} style={{ transitionDelay: '0.2s' }}>
               En IUDEX estamos cambiando la práctica legal mexicana. Somos un equipo de abogados y programadores definiendo un nuevo estándar en la abogacía moderna.
             </p>
 
-            <div className={`flex flex-col sm:flex-row items-center justify-center gap-4 transition-all duration-1000 cubic-bezier(0.16, 1, 0.3, 1) ${
+            <div className={`flex flex-col sm:flex-row items-center justify-center gap-4 transition-all duration-500 cubic-bezier(0.16, 1, 0.3, 1) ${
               visibleSections.has('about') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
             }`} style={{ transitionDelay: '0.4s' }}>
               <button
@@ -1712,7 +1712,7 @@ function App() {
         className="relative flex items-center py-16 px-8 md:px-16 bg-[#F9F9F8]"
       >
         <div
-          className={`relative z-10 w-full max-w-7xl mx-auto transition-all duration-1000 ${
+          className={`relative z-10 w-full max-w-7xl mx-auto transition-all duration-500 ${
             visibleSections.has('faq') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
           }`}
         >
@@ -1732,7 +1732,7 @@ function App() {
             {faqItems.map((item, index) => (
               <div 
                 key={index} 
-                className={`border-b border-black/10 transition-all duration-1000 cubic-bezier(0.16, 1, 0.3, 1) ${
+                className={`border-b border-black/10 transition-all duration-500 cubic-bezier(0.16, 1, 0.3, 1) ${
                   visibleSections.has('faq') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
                 }`}
                 style={{ transitionDelay: `${index * 0.12 + 0.3}s` }}
@@ -1819,7 +1819,7 @@ function App() {
         </button>
         
         <div 
-          className={`w-full max-w-7xl px-4 transition-all duration-1000 delay-300 ${
+          className={`w-full max-w-7xl px-4 transition-all duration-500 delay-100 ${
             isModalOpen ? 'scale-100 opacity-100 translate-y-0' : 'scale-90 opacity-0 translate-y-12'
           }`}
           onClick={(e) => e.stopPropagation()}
