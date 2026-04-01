@@ -15,6 +15,8 @@ function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showCookies, setShowCookies] = useState(false);
   const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
+  const [showPrivacy, setShowPrivacy] = useState(false);
+  const [showTerms, setShowTerms] = useState(false);
   
   useEffect(() => {
     const consent = localStorage.getItem('iudex-cookies');
@@ -119,7 +121,7 @@ function App() {
     { id: 'features', label: 'Características' },
     { id: 'security', label: 'Seguridad' },
     { id: 'tracking', label: 'Seguimiento' },
-    { id: 'about', label: 'Nosotros' },
+    { id: 'demo', label: 'Demo' },
   ];
 
 
@@ -183,7 +185,7 @@ function App() {
 
   const faqItems = [
     {
-      q: "¿DE DONDE OBTIENEN IUDEX SU INFORMACIÓN?",
+      q: "¿DE DONDE OBTIENE IUDEX SU INFORMACIÓN?",
       a: "IUDEX utiliza una base de datos robusta y permanentemente actualizada. Nuestro ecosistema de información integra legislación federal, tesis aisladas, jurisprudencias y resoluciones del Poder Judicial de la Federación (PJF)."
     },
     {
@@ -213,6 +215,214 @@ function App() {
 
   return (
     <div className="min-h-screen bg-white text-black overflow-x-hidden">
+      {showPrivacy && (
+        <div className="fixed inset-0 z-[1000] bg-white overflow-y-auto animate-in fade-in duration-500">
+          <header className={`fixed top-0 left-0 right-0 z-[1001] bg-white/90 backdrop-blur-md px-8 py-6`}>
+            <div className="flex items-center justify-between max-w-7xl mx-auto">
+              <button 
+                onClick={() => { setShowPrivacy(false); window.scrollTo(0,0); }}
+                className="flex items-center gap-3 group text-xs uppercase tracking-[0.2em] font-medium"
+              >
+                <div className="w-8 h-8 rounded-full border border-black/10 flex items-center justify-center group-hover:bg-black group-hover:text-white transition-all">
+                  <ArrowRight size={14} className="rotate-180" />
+                </div>
+                <span>Volver al inicio</span>
+              </button>
+              <img src="/images/logo.png" alt="IUDEX" className="h-10 w-auto" />
+            </div>
+          </header>
+
+          <div className="max-w-4xl mx-auto px-8 pt-48 pb-64">
+            <div className="mb-24">
+              <span className="text-black/30 text-[10px] font-bold tracking-[0.3em] uppercase mb-4 block">Documentación Legal</span>
+              <h1 className="text-6xl font-light tracking-tight mb-8">Política de <span className="text-black/40">Privacidad</span></h1>
+              <div className="flex items-center gap-4 text-black/50 text-sm">
+                <div className="w-6 h-[1px] bg-black/20" />
+                <span>Última actualización: 25 de marzo de 2026</span>
+              </div>
+            </div>
+
+            <div className="space-y-12 text-black/70 leading-relaxed text-justify privacy-content">
+              <p className="text-lg font-light text-black">
+                TARNIX TECHNOLOGIES, S.A. de C.V. ("IUDEX", "nosotros", "nuestro") reconoce la importancia de su derecho a la privacidad y se compromete a proteger y salvaguardar la información que recopila sobre usted.
+              </p>
+
+              <section>
+                <h2 className="text-black font-semibold uppercase tracking-widest text-xs mb-6">1. Alcance de esta Política</h2>
+                <div className="space-y-4">
+                  <p>Este Aviso de Privacidad aplica al tratamiento de datos personales que realiza TARNIX TECHNOLOGIES S.A. de C.V. cuando usted accede o utiliza nuestros productos, servicios, funcionalidades y tecnologías, incluyendo nuestro sitio web, plataforma y aplicaciones que intercambian información con IUDEX, en la medida en que IUDEX actúe como responsable del tratamiento.</p>
+                  <p>Para efectos de este Aviso, IUDEX será responsable respecto de los datos personales que recabamos y tratamos para: (i) alta y administración de cuentas de usuario, (ii) facturación y pagos, (iii) soporte y atención a clientes, (iv) seguridad de la información, prevención de fraude y administración de accesos, (v) cumplimiento de obligaciones legales, y (vi) comunicaciones relacionadas con la operación del servicio.</p>
+                </div>
+              </section>
+
+              <section>
+                <h2 className="text-black font-semibold uppercase tracking-widest text-xs mb-6">2. Información que Recopilamos</h2>
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="text-black text-sm mb-3">2.1 Información que usted nos proporciona directamente</h3>
+                    <p>Nombre, correo electrónico, datos relacionados con su actividad profesional, preferencias de idioma, credenciales de acceso e información de pago.</p>
+                  </div>
+                  <div>
+                    <h3 className="text-black text-sm mb-3">2.2 Información que recabamos automáticamente</h3>
+                    <p>Datos de registro (dirección IP, navegador), información del dispositivo (sistema operativo, identificadores) y datos de uso (funcionalidades utilizadas, zona horaria).</p>
+                  </div>
+                </div>
+              </section>
+
+              <section>
+                <h2 className="text-black font-semibold uppercase tracking-widest text-xs mb-6">3. Cómo Utilizamos sus Datos Personales</h2>
+                <p>Proveer, operar y mejorar los Servicios, gestionar autenticación, brindar soporte técnico, facturación y cobro, seguridad de la información y cumplimiento de obligaciones legales.</p>
+              </section>
+
+              <section>
+                <h2 className="text-black font-semibold uppercase tracking-widest text-xs mb-6">4. Con Quién Compartimos sus Datos Personales</h2>
+                <p>Afiliadas, proveedores (encargados), Suscriptores (clientes empresariales), autoridades competentes y en caso de operaciones corporativas.</p>
+              </section>
+
+              <section>
+                <h2 className="text-black font-semibold uppercase tracking-widest text-xs mb-6">5. Cómo Protegemos sus Datos Personales</h2>
+                <p>Implementamos medidas administrativas, técnicas y físicas proporcionales para proteger sus datos personales contra daño, pérdida o acceso no autorizado, incluyendo cifrado y controles de acceso.</p>
+              </section>
+
+              <section>
+                <h2 className="text-black font-semibold uppercase tracking-widest text-xs mb-6">6. Transferencias Internacionales</h2>
+                <p>Podemos realizar transferencias internacionales de datos cuando sea necesario para operar los Servicios, bajo obligaciones de confidencialidad y restricciones de uso conforme a la LFPDPPP.</p>
+              </section>
+
+              <section>
+                <h2 className="text-black font-semibold uppercase tracking-widest text-xs mb-6">7. Sus Derechos (ARCO)</h2>
+                <p>Usted tiene derechos de Acceso, Rectificación, Cancelación y Oposición. Para ejercer cualquiera de estos derechos, puede presentar una solicitud por escrito a contacto@iudex.com.</p>
+              </section>
+
+              <section className="bg-black/5 p-8 rounded-3xl border border-black/5">
+                <h2 className="text-black font-bold uppercase tracking-[0.2em] text-[10px] mb-4">Información de Contacto</h2>
+                <p className="text-sm">TARNIX TECHNOLOGIES, S.A. de C.V.</p>
+                <p className="text-sm mb-4">Oficial de Protección de Datos:</p>
+                <a href="mailto:contacto@iudex.com" className="text-black font-medium hover:underline tracking-widest text-sm">contacto@iudex.com</a>
+              </section>
+            </div>
+          </div>
+          
+          <footer className="py-12 border-t border-black/5 bg-neutral-50 px-8 text-center text-black/30 text-xs">
+            © 2026 TARNIX TECHNOLOGIES, S.A. de C.V. - Todos los derechos reservados.
+          </footer>
+        </div>
+      )}
+
+      {showTerms && (
+        <div className="fixed inset-0 z-[1000] bg-white overflow-y-auto animate-in fade-in duration-500">
+          <header className={`fixed top-0 left-0 right-0 z-[1001] bg-white/90 backdrop-blur-md px-8 py-6`}>
+            <div className="flex items-center justify-between max-w-7xl mx-auto">
+              <button 
+                onClick={() => { setShowTerms(false); window.scrollTo(0,0); }}
+                className="flex items-center gap-3 group text-xs uppercase tracking-[0.2em] font-medium"
+              >
+                <div className="w-8 h-8 rounded-full border border-black/10 flex items-center justify-center group-hover:bg-black group-hover:text-white transition-all">
+                  <ArrowRight size={14} className="rotate-180" />
+                </div>
+                <span>Volver al inicio</span>
+              </button>
+              <img src="/images/logo.png" alt="IUDEX" className="h-10 w-auto" />
+            </div>
+          </header>
+
+          <div className="max-w-4xl mx-auto px-8 pt-48 pb-64">
+            <div className="mb-24">
+              <span className="text-black/30 text-[10px] font-bold tracking-[0.3em] uppercase mb-4 block">Marco Normativo</span>
+              <h1 className="text-6xl font-light tracking-tight mb-8">Términos y <span className="text-black/40">Condiciones de Uso</span></h1>
+              <div className="flex items-center gap-4 text-black/50 text-sm">
+                <div className="w-6 h-[1px] bg-black/20" />
+                <span>Fecha de vigencia: 26 de marzo de 2026</span>
+              </div>
+            </div>
+
+            <div className="space-y-12 text-black/70 leading-relaxed text-justify privacy-content">
+              <section>
+                <h2 className="text-black font-semibold uppercase tracking-widest text-xs mb-6 font-bold">Preámbulo</h2>
+                <p>
+                  El presente documento establece las condiciones que rigen el acceso y utilización de los servicios digitales ofrecidos a través de IUDEX (en lo sucesivo, "el Servicio" o "la Aplicación"). La utilización del Servicio implica la manifestation expresa de voluntad del Usuario de sujetarse a las presentes estipulaciones, en términos de lo previsto por los artículos 1803 y 1807 del Código Civil Federal, relativos al consentimiento y la forma de los contratos celebrados por medios electrónicos.
+                </p>
+                <p className="mt-4">
+                  Quien no manifieste su conformidad con estas disposiciones deberá abstenerse de acceder o utilizar el Servicio. La continuación en el uso posterior a cualquier actualización de este instrumento se entenderá como ratificación tácita de los términos modificados.
+                </p>
+              </section>
+
+              <section>
+                <h2 className="text-black font-semibold uppercase tracking-widest text-xs mb-6 font-bold">I. Naturaleza y Alcance del Servicio</h2>
+                <p>
+                  IUDEX constituye una solución tecnológica basada en inteligencia artificial que ofrece capacidades de investigación en materia jurídica, procesamiento y análisis documental, y funcionalidades de asistencia para la elaboración de textos legales.
+                </p>
+                <p className="mt-4 italic">
+                  El Servicio opera exclusivamente como herramienta auxiliar de trabajo. Bajo ninguna circunstancia los resultados producidos por la Aplicación deben interpretarse como opinión jurídica profesional, dictamen legal o sustituto del juicio de un abogado debidamente habilitado. El Usuario asume íntegramente la obligación de validar, contrastar y verificar cualquier información o contenido generado antes de emplearlo para propósitos profesionales o en procedimientos de cualquier índole.
+                </p>
+              </section>
+
+              <section>
+                <h2 className="text-black font-semibold uppercase tracking-widest text-xs mb-6 font-bold">II. Creación de Cuenta y Obligaciones del Usuario</h2>
+                <p>
+                  El acceso pleno a las funcionalidades del Servicio requiere la creación de una cuenta mediante el registro de datos que deberán ser verídicos, precisos y mantenerse actualizados, de conformidad con las obligaciones de información previstas en la Ley Federal de Protección al Consumidor.
+                </p>
+                <p className="mt-4">
+                  El Usuario asume las siguientes responsabilidades:
+                </p>
+                <ul className="list-disc pl-6 space-y-2 mt-4 text-justify">
+                  <li>Preservar la confidencialidad de sus claves de acceso y credenciales de autenticación.</li>
+                  <li>Supervisar y responder por toda actividad ejecutada desde su cuenta, independientemente de que haya sido realizada por el titular o por terceros.</li>
+                  <li>Comunicar de manera inmediata a IUDEX cualquier incidente de seguridad, acceso indebido o sospecha de vulneración de su cuenta.</li>
+                  <li>No compartir, ceder ni permitir el uso de su cuenta por personas no autorizadas.</li>
+                </ul>
+              </section>
+
+              <section>
+                <h2 className="text-black font-semibold uppercase tracking-widest text-xs mb-6 font-bold">III. Régimen de Propiedad Intelectual</h2>
+                <div className="space-y-4">
+                  <p><strong>Titularidad del Servicio:</strong> La totalidad de los elementos que componen la Aplicación pertenecen en exclusiva a IUDEX o a terceros que han otorgado las licencias correspondientes. Dichos elementos se encuentran amparados por la legislación mexicana en materia de derechos de autor y propiedad industrial.</p>
+                  <p><strong>Titularidad del Usuario:</strong> Los trabajos, análisis, documentos y demás materiales que el Usuario genere mediante la utilización del Servicio son y permanecerán siendo propiedad del Usuario, quien podrá disponer de ellos libremente para sus actividades profesionales.</p>
+                </div>
+              </section>
+
+              <section>
+                <h2 className="text-black font-semibold uppercase tracking-widest text-xs mb-6 font-bold">IV. Tratamiento de Información Personal y Confidencialidad</h2>
+                <p>
+                  La recopilación, almacenamiento y procesamiento de datos personales se efectúa con estricto apego a nuestra Política de Privacidad y a la Ley Federal de Protección de Datos Personales en Posesión de los Particulares.
+                </p>
+                <p className="mt-4">
+                  La información que el Usuario proporcione, cargue o genere dentro de la Aplicación mantiene su carácter de propiedad del Usuario.
+                </p>
+              </section>
+
+              <section>
+                <h2 className="text-black font-semibold uppercase tracking-widest text-xs mb-6 font-bold">V. Lineamientos de Conducta</h2>
+                <p>El Usuario se obliga a emplear el Servicio de manera lícita, ética y conforme a la normatividad aplicable. Se consideran conductas prohibidas:</p>
+                <ul className="list-disc pl-6 space-y-2 mt-4 text-xs">
+                  <li>Destinar el Servicio a finalidades contrarias a la ley o constitutivas de fraude.</li>
+                  <li>Procurar acceso a sistemas o secciones para los cuales no cuente con autorización.</li>
+                  <li>Copiar, alterar o comercializar elementos del Servicio sin consentimiento expreso.</li>
+                  <li>Ejecutar procesos de ingeniería inversa sobre el software.</li>
+                </ul>
+              </section>
+
+              <section>
+                <h2 className="text-black font-semibold uppercase tracking-widest text-xs mb-6 font-bold">XVI. Legislación Aplicable y Competencia Jurisdiccional</h2>
+                <p>
+                  El presente instrumento se rige por las leyes de los Estados Unidos Mexicanos. Para cualquier controversia, las partes se someten expresamente a la jurisdicción de los tribunales competentes con sede en la Ciudad de México.
+                </p>
+              </section>
+
+              <section className="bg-neutral-50 p-8 rounded-3xl">
+                <h2 className="text-black font-semibold uppercase tracking-widest text-xs mb-6 font-bold">XVII. Medios de Contacto</h2>
+                <p className="text-sm mb-4">Para consultas, aclaraciones o cualquier comunicación relacionada con el Servicio:</p>
+                <a href="mailto:contacto@iudex.mx" className="text-black font-medium hover:underline tracking-widest text-sm">contacto@iudex.mx</a>
+              </section>
+            </div>
+          </div>
+          
+          <footer className="py-12 border-t border-black/5 bg-neutral-50 px-8 text-center text-black/30 text-[10px] uppercase tracking-widest">
+            © 2026 TARNIX TECHNOLOGIES, S.A. de C.V. - Todos los derechos reservados.
+          </footer>
+        </div>
+      )}
+
       {/* Cinematic Preloader Overlay */}
       <div 
         className={`fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center transition-all duration-1000 ${
@@ -296,7 +506,14 @@ function App() {
             {menuItems.map((item, index) => (
               <button
                 key={item.id}
-                onClick={() => scrollToSection(item.id)}
+                onClick={() => {
+                  if (item.id === 'demo') {
+                    setIsDemoModalOpen(true);
+                    setMenuOpen(false);
+                  } else {
+                    scrollToSection(item.id);
+                  }
+                }}
                 className={`block text-3xl md:text-5xl font-light tracking-tight text-white hover:text-neutral-500 transition-all duration-300 ${
                   menuOpen ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'
                 }`}
@@ -356,8 +573,8 @@ function App() {
           </div>
         </div>
 
-        {/* Hero Content - Bottom Left */}
-        <div className="absolute bottom-16 left-8 md:left-16 max-w-4xl pointer-events-none">
+        {/* Hero Content - Raised position */}
+        <div className="absolute bottom-32 left-8 md:left-16 max-w-4xl pointer-events-none">
           {/* Badge */}
           <div 
             className={`flex items-center gap-3 mb-8 transition-all duration-1000 cubic-bezier(0.16, 1, 0.3, 1) ${
@@ -411,11 +628,19 @@ function App() {
           >
             {/* Paragraph Content (Parallax) */}
             <div style={{ transform: `translateY(${scrollY * -0.3}px)` }}>
-              <p className="text-sm md:text-base text-black/60 leading-relaxed max-w-lg">
+              <p className="text-sm md:text-base text-black/60 leading-relaxed max-w-lg mb-10">
                 La única IA legal que entiende el derecho mexicano. Entrenamos nuestro modelo 
                 para ajustarse a la tradición jurídica romano-canónica con criterio jurídico 
                 y sustento legal.
               </p>
+              
+              <button
+                onClick={() => setIsDemoModalOpen(true)}
+                className="pointer-events-auto inline-flex items-center gap-3 px-8 py-4 bg-black text-white rounded-full text-xs font-semibold hover:bg-neutral-800 transition-all shadow-[0_20px_40px_-12px_rgba(0,0,0,0.3)] hover:shadow-[0_30px_60px_-12px_rgba(0,0,0,0.4)] active:scale-95 uppercase tracking-[0.2em]"
+              >
+                Solicitar Demo
+                <ArrowRight size={16} />
+              </button>
             </div>
           </div>
         </div>
@@ -530,7 +755,7 @@ function App() {
             }}
           >
             <h3 className="text-4xl md:text-6xl font-light mb-8">Mejora tu <span className="text-black/50">práctica legal</span></h3>
-            <p className="text-black/80 text-xl md:text-2xl leading-relaxed max-w-3xl mx-auto">
+            <p className="text-black/80 text-xl md:text-2xl leading-relaxed max-w-3xl mx-auto text-center">
               IUDEX disminuye errores y aumenta la calidad del trabajo.<br className="hidden md:block" />
               Descubre una nueva forma de eficiencia usando tecnología jurídica.
             </p>
@@ -549,18 +774,20 @@ function App() {
             <div className="relative mx-auto w-full max-w-4xl shadow-2xl rounded-[2.5rem] overflow-hidden border border-neutral-200 transition-transform duration-500 group-hover:scale-[1.02]">
               {/* Monitor Body */}
               <div className="relative bg-[#F5F5F7] p-4 pb-14 shadow-inner">
-                {/* Screen Area (Black Bezel) */}
-                <div className="bg-black rounded-2xl p-4 aspect-video overflow-hidden relative shadow-inner">
-                  {/* The Video */}
-                  <video 
-                    autoPlay 
-                    loop 
-                    muted 
-                    playsInline 
-                    className="w-full h-full object-contain rounded-lg shadow-2xl"
-                  >
-                     <source src="/videos/iudex-video-31-marzo.mp4" type="video/mp4" />
-                  </video>
+                {/* Screen Area (Black Bezel) - Updated to 15px rounding */}
+                <div className="bg-black rounded-[15px] p-4 aspect-[16/10] relative shadow-2xl overflow-hidden">
+                  <div className="w-full h-full rounded-[15px] overflow-hidden bg-black">
+                    {/* The Video - Matching user-requested 15px rounding */}
+                    <video 
+                      autoPlay 
+                      loop 
+                      muted 
+                      playsInline 
+                      className="w-full h-full object-cover"
+                    >
+                       <source src="/videos/iudex-video-31-marzo.mp4" type="video/mp4" />
+                    </video>
+                  </div>
                 </div>
                 
                 {/* iMac Bottom Chin Area */}
@@ -611,36 +838,26 @@ function App() {
 
         {/* Middle Smaller Text (Right Aligned per user request) */}
         <div 
-          className={`w-full max-w-sm ml-auto text-right mt-20 mb-20 space-y-6 transition-all duration-1000 delay-300 ${
+          className={`w-full max-w-sm ml-auto text-right mt-20 mb-32 space-y-8 transition-all duration-1000 delay-300 ${
             visibleSections.has('features') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
           }`}
         >
-          <p className="text-sm md:text-base text-black/60 leading-relaxed">
-            Entendemos el mundo del derecho y la tecnología, y esa pasión da forma a cada herramienta que construimos.
-          </p>
-          <p className="text-sm md:text-base text-black/60 leading-relaxed">
-            Si buscas un sistema que realmente entienda tu espacio y proteja lo que estás creando, has encontrado el lugar correcto.
-          </p>
-        </div>
-
-        {/* Bottom Slider (Confusion to Clarity) - Moved to Right */}
-        <div 
-          className={`w-full max-w-sm ml-auto mb-32 transition-all duration-1000 delay-500 ${
-            visibleSections.has('features') ? 'opacity-100' : 'opacity-0'
-          }`}
-        >
-          <div className="flex justify-between text-[10px] font-bold tracking-widest text-black/40 uppercase mb-4">
-            <span>Confusión</span>
-            <span>Claridad</span>
-          </div>
-          <div className="relative h-[2px] bg-black/10 w-full overflow-hidden">
-            <div 
-              className="absolute top-0 right-0 h-full bg-black transition-all duration-1000"
-              style={{ width: visibleSections.has('features') ? '100%' : '0%' }}
-            />
-            {/* Dots */}
-            <div className="absolute top-1/2 left-0 -translate-y-1/2 w-2 h-2 bg-black/40" />
-            <div className="absolute top-1/2 right-0 -translate-y-1/2 w-2 h-2 bg-black" />
+          <div className="space-y-6">
+            <p className="text-sm md:text-base text-black/60 leading-relaxed">
+              Entendemos el mundo del derecho y la tecnología, y esa pasión da forma a cada herramienta que construimos.
+            </p>
+            <div className="space-y-4">
+              <p className="text-sm md:text-base text-black/60 leading-relaxed">
+                Si buscas un sistema que realmente entienda tu espacio y proteja lo que estás creando, has encontrado el lugar correcto.
+              </p>
+              {/* Animated Line Move from Slider - Now full width and thicker */}
+              <div className="relative h-[2px] bg-black/10 w-full overflow-hidden">
+                <div 
+                  className="absolute top-0 right-0 h-full bg-black/60 transition-all duration-[1500ms] delay-500"
+                  style={{ width: visibleSections.has('features') ? '100%' : '0%' }}
+                />
+              </div>
+            </div>
           </div>
         </div>
 
@@ -733,7 +950,7 @@ function App() {
         >
           {/* Top Navigation-like labels */}
           <div className="flex justify-between w-full text-[10px] tracking-widest font-bold uppercase mb-20 text-black/90">
-            <span>Seguimiento de Procesos</span>
+            <span>Seguimiento de procesos jurisdiccionales</span>
             <span>(05)</span>
           </div>
           <div className="flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-24">
@@ -757,22 +974,18 @@ function App() {
 
               {/* Buttons moved below text */}
               <div className="flex items-center gap-1.5">
-                <a 
-                  href="https://chat.iudex.mx"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <button 
+                  onClick={() => setIsDemoModalOpen(true)}
                   className="h-[64px] px-10 bg-[#24292E] text-white rounded-[2rem] flex items-center justify-center text-[13px] font-bold tracking-widest uppercase hover:bg-black transition-all group overflow-hidden relative shadow-lg"
                 >
-                  <span className="relative z-10">INICIAR SESIÓN</span>
-                </a>
-                <a 
-                  href="https://chat.iudex.mx"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  <span className="relative z-10">SOLICITAR DEMO</span>
+                </button>
+                <button 
+                  onClick={() => setIsDemoModalOpen(true)}
                   className="h-[64px] w-[64px] bg-[#E2E2E2] rounded-[2rem] flex items-center justify-center cursor-pointer hover:bg-[#D1D1D1] transition-colors group shadow-lg"
                 >
                   <ArrowUpRight size={24} className="text-[#1A1A1A] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                </a>
+                </button>
               </div>
             </div>
 
@@ -973,7 +1186,7 @@ function App() {
           </div>
 
           <div className="max-w-3xl mx-auto text-center">
-            <p className={`text-xl text-black/60 leading-relaxed mb-12 transition-all duration-1000 cubic-bezier(0.16, 1, 0.3, 1) ${
+            <p className={`text-xl text-black/60 leading-relaxed mb-12 text-center transition-all duration-1000 cubic-bezier(0.16, 1, 0.3, 1) ${
               visibleSections.has('about') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
             }`} style={{ transitionDelay: '0.2s' }}>
               En IUDEX estamos cambiando la práctica legal mexicana. Somos un equipo de abogados y programadores definiendo un nuevo estándar en la abogacía moderna.
@@ -1056,33 +1269,40 @@ function App() {
       </section>
 
       {/* Footer */}
-      <footer className="mt-32 pt-16 pb-24 border-t border-black/10">
+      <footer className="pt-12 pb-24 border-t border-black/10">
         <div className="max-w-7xl mx-auto px-8 md:px-16">
           <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-            <div className="flex items-center gap-4">
-              <img src="/images/logo.png" alt="IUDEX" className="h-10 w-auto" />
+            {/* Brand & Rights */}
+            <div className="flex flex-col items-center md:items-start text-center md:text-left">
+              <img src="/images/tracking-logo.png" alt="IUDEX" className="h-16 w-auto mb-6 object-contain" />
+              <div className="flex flex-col gap-1">
+                <div className="text-black/30 text-xs text-center md:text-left">
+                  © 2026 IUDEX. Todos los derechos reservados.
+                </div>
+              </div>
             </div>
-            <div className="flex items-center gap-8 text-black/40 text-sm">
+
+            {/* Legal Links Horizontal */}
+            <nav className="flex flex-wrap justify-center items-center gap-x-10 gap-y-4">
               <button 
-                onClick={() => scrollToSection('features')} 
-                className="hover:text-black transition-colors duration-300"
+                onClick={() => setShowPrivacy(true)}
+                className="text-black/40 hover:text-black transition-colors text-[10px] uppercase font-bold tracking-[0.2em]"
               >
-                Nosotros
+                Política de Privacidad
               </button>
               <button 
-                onClick={() => scrollToSection('about')} 
-                className="hover:text-black transition-colors duration-300"
+                onClick={() => setShowTerms(true)}
+                className="text-black/40 hover:text-black transition-colors text-[10px] uppercase font-bold tracking-[0.2em]"
+              >
+                Términos
+              </button>
+              <button 
+                onClick={() => setIsDemoModalOpen(true)}
+                className="text-black/40 hover:text-black transition-colors text-[10px] uppercase font-bold tracking-[0.2em]"
               >
                 Contacto
               </button>
-              <button className="hover:text-black transition-colors duration-300">Privacidad</button>
-            </div>
-            <div className="flex flex-col items-end gap-1">
-              <span className="text-[10px] text-black font-semibold tracking-[0.2em] uppercase mb-1">Rest Assured</span>
-              <div className="text-black/30 text-sm">
-                © 2026 IUDEX. Todos los derechos reservados.
-              </div>
-            </div>
+            </nav>
           </div>
         </div>
       </footer>
@@ -1149,7 +1369,7 @@ function App() {
           </div>
           <div className="flex-1 text-center md:text-left">
             <h4 className="text-black font-bold text-sm mb-0.5">Control de Privacidad</h4>
-            <p className="text-black/50 text-[13px] leading-relaxed">
+            <p className="text-black/50 text-[13px] leading-relaxed text-center md:text-left">
               Utilizamos cookies para optimizar tu experiencia y analizar el tráfico. Al aceptar, consientes el uso sugerido por nuestra política de datos.
             </p>
           </div>
@@ -1190,7 +1410,7 @@ function App() {
             <div className="mb-10 text-center md:text-left">
               <span className="text-black/30 text-[10px] font-bold tracking-[0.2em] uppercase mb-3 block">Acceso Prioritario</span>
               <h3 className="text-3xl font-light mb-4">Solicitar <span className="text-black/50">Demo</span></h3>
-              <p className="text-black/40 text-sm">Completa tus datos y un especialista legal tech te contactará.</p>
+              <p className="text-black/40 text-sm text-center md:text-left">Completa tus datos y nos pondremos en contacto.</p>
             </div>
 
             <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
@@ -1236,7 +1456,7 @@ function App() {
 
               <div className="pt-6 border-t border-neutral-100 mt-8">
                 <p className="text-[10px] text-black/30 leading-relaxed text-center">
-                  IUDEX utiliza tu información para entregarte el servicio solicitado. También podemos enviarte correos con información comercial; puedes cancelar tu suscripción en cualquier momento usando el enlace incluido en nuestros mensajes. Consulta los detalles en nuestro Aviso de Privacidad.
+                  IUDEX utiliza tu información para entregarte el servicio solicitado. También podemos enviarte correos con información comercial; puedes cancelar tu suscripción en cualquier momento usando el enlace incluido en nuestros mensajes. Consulta los detalles en nuestro <button type="button" onClick={() => { setIsDemoModalOpen(false); setShowPrivacy(true); }} className="underline hover:text-black transition-colors">Aviso de Privacidad</button> y <button type="button" onClick={() => { setIsDemoModalOpen(false); setShowTerms(true); }} className="underline hover:text-black transition-colors">Términos y Condiciones</button>.
                 </p>
               </div>
             </form>
