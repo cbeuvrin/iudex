@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowRight, ArrowUpRight, User, X, Cookie } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, User, X, Menu, Cookie } from 'lucide-react';
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -216,7 +216,7 @@ function App() {
     }
   ];
 
-  const [openAccordion, setOpenAccordion] = useState<string | null>('lfpdppp');
+  const [openAccordion, setOpenAccordion] = useState<string | null>(null);
   const [openFAQAccordion, setOpenFAQAccordion] = useState<number | null>(null);
 
   return (
@@ -963,22 +963,15 @@ function App() {
               Iniciar Sesión
             </a>
 
-            {/* Iniciar Sesión - Mobile Icon only */}
-            <a
-              href="https://chat.iudex.mx"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="md:hidden w-10 h-10 flex items-center justify-center rounded-full border border-black/20 hover:bg-black hover:text-white transition-all duration-300"
-            >
-              <User size={18} />
-            </a>
 
-            {/* Menu Button */}
+
+            {/* Menu Button - Simplified Hamburger */}
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="px-6 py-2 rounded-full border border-black/20 flex items-center justify-center hover:bg-black hover:text-white transition-all duration-300 text-xs uppercase tracking-[0.2em] font-medium"
+              className="w-10 h-10 flex items-center justify-center transition-all duration-300"
+              aria-label="Menu"
             >
-              {menuOpen ? "Cerrar" : "+ Click Menu"}
+              {menuOpen ? <X size={28} /> : <Menu size={28} />}
             </button>
           </div>
         </div>
@@ -1070,7 +1063,7 @@ function App() {
         </div>
 
         {/* Hero Content - Raised position geared for mobile centering */}
-        <div className="absolute bottom-20 md:bottom-32 left-0 md:left-16 w-full md:max-w-4xl px-8 md:px-0 text-center md:text-left pointer-events-none">
+        <div className="absolute bottom-10 md:bottom-32 left-0 md:left-16 w-full md:max-w-4xl px-8 md:px-0 text-center md:text-left pointer-events-none">
           {/* Badge */}
           <div 
             className={`flex items-center justify-center md:justify-start gap-3 mb-8 transition-all duration-500 cubic-bezier(0.16, 1, 0.3, 1) ${
@@ -1233,21 +1226,20 @@ function App() {
       <section
         id="video-showcase"
         ref={videoSectionRef}
-        className="relative flex flex-col items-center justify-center min-h-[120vh] py-16 sm:py-24 px-6 sm:px-12 md:px-16 bg-white overflow-hidden"
+        className="relative flex flex-col items-center justify-center min-h-[100vh] md:min-h-[120vh] py-8 md:py-24 px-6 sm:px-12 md:px-16 bg-white overflow-hidden"
       >
-        <div className="flex justify-between w-full max-w-7xl text-[10px] tracking-widest font-bold uppercase mb-20 text-black/90 px-0">
+        <div className="flex justify-between w-full max-w-7xl text-[10px] tracking-widest font-bold uppercase mb-8 md:mb-20 text-black/90 px-0">
           <span>Experiencia Visual</span>
           <span>(02)</span>
         </div>
         {/* Centered Content Wrapper */}
         <div className="relative z-10 w-full max-w-5xl flex flex-col items-center">
           
-          {/* Header Text (Now Centered) */}
           <div 
-            className="text-center mb-24 transition-all duration-500"
+            className="text-center mb-16 md:mb-24 transition-all duration-500"
             style={{ 
-              opacity: Math.min(1, videoProgress * 1.2),
-              transform: `translateY(${(1 - Math.min(1, videoProgress * 1.2)) * 40}px)`
+              opacity: Math.min(1, videoProgress * 3),
+              transform: `translateY(${(1 - Math.min(1, videoProgress * 3)) * 40}px)`
             }}
           >
             <h3 className="text-3xl sm:text-4xl md:text-6xl font-light mb-8">Mejora tu <span className="text-black/50">práctica legal</span></h3>
@@ -1320,7 +1312,7 @@ function App() {
             visibleSections.has('features') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
           }`}
         >
-          <h2 className="text-4xl md:text-7xl lg:text-[110px] font-light leading-[1] tracking-tighter text-black w-full text-left">
+          <h2 className="text-4xl md:text-7xl lg:text-[110px] font-light leading-[1] tracking-tighter text-black w-full text-center md:text-left">
             <span className="text-black">Redacta</span>{" "}
             <span className={`transition-colors duration-500 delay-150 ${visibleSections.has('features') ? 'text-black/10' : 'text-black'}`}>con precisión,</span> 
             <span className="text-black"> resuelve</span>{" "}
