@@ -144,8 +144,8 @@ function App() {
       value: '10M+',
       label: 'SENTENCIAS',
       description: "Repositorio de 10 millones de sentencias analizadas con rigor jurídico. IUDEX identifica tendencias y puntos ciegos, otorgando una ventaja estratégica en la preparación de argumentos.",
-      source: "CORTE & COLEGIADOS",
-      subSource: "",
+      source: "PODER JUDICIAL",
+      subSource: "Precedentes",
       tags: ["SCJN", "Tribunales", "Juzgados"]
     },
     {
@@ -192,7 +192,7 @@ function App() {
   const faqItems = [
     {
       q: "¿DE DÓNDE OBTIENE IUDEX SU INFORMACIÓN?",
-      a: "IUDEX utiliza una base de datos robusta y permanentemente actualizada. Nuestro ecosistema de información integra legislación federal, tesis aisladas, jurisprudencias y resoluciones de Corte & colegiados de la Federación (PJF)."
+      a: "IUDEX utiliza una base de datos robusta y permanentemente actualizada. Nuestro ecosistema de información integra legislación federal, tesis aisladas, jurisprudencias y resoluciones del Poder Judicial de la Federación (PJF)."
     },
     {
       q: "¿IUDEX TIENE UN LÍMITE DE RESPUESTAS COMO OTRAS INTELIGENCIAS ARTIFICIALES?",
@@ -1052,7 +1052,7 @@ function App() {
             transition: 'transform 6s cubic-bezier(0.16, 1, 0.3, 1), opacity 1.5s ease-out, filter 3s ease-out',
             transform: `translate(-50%, -50%) ${
               startMainAnims 
-                ? 'translateX(20vw) scale(1)' 
+                ? (window.innerWidth < 768 ? 'translateY(-22vh) scale(1.4)' : 'translateX(20vw) scale(1)') 
                 : 'translateX(0) scale(3.5)'
             }`,
             opacity: startMainAnims ? 0.9 : 0,
@@ -1069,16 +1069,16 @@ function App() {
           </div>
         </div>
 
-        {/* Hero Content - Raised position */}
-        <div className="absolute bottom-32 left-8 md:left-16 max-w-4xl pointer-events-none">
+        {/* Hero Content - Raised position geared for mobile centering */}
+        <div className="absolute bottom-20 md:bottom-32 left-0 md:left-16 w-full md:max-w-4xl px-8 md:px-0 text-center md:text-left pointer-events-none">
           {/* Badge */}
           <div 
-            className={`flex items-center gap-3 mb-8 transition-all duration-1000 cubic-bezier(0.16, 1, 0.3, 1) ${
+            className={`flex items-center justify-center md:justify-start gap-3 mb-8 transition-all duration-1000 cubic-bezier(0.16, 1, 0.3, 1) ${
               startMainAnims ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
             }`}
             style={{ transitionDelay: '600ms' }}
           >
-            <div className="w-8 h-[1px] bg-black/40" />
+            <div className="hidden md:block w-8 h-[1px] bg-black/40" />
             <span className="text-black/50 text-xs tracking-[0.2em] uppercase">Inteligencia Artificial</span>
           </div>
 
@@ -1093,7 +1093,7 @@ function App() {
               {/* Line 1 Content (Parallax) */}
               <span 
                 className="block"
-                style={{ transform: `translateY(${scrollY * -0.6}px)` }}
+                style={{ transform: `translateY(${window.innerWidth < 768 ? 0 : scrollY * -0.6}px)` }}
               >
                 Diseñado para
               </span>
@@ -1108,7 +1108,7 @@ function App() {
               {/* Line 2 Content (Parallax) */}
               <span 
                 className="block text-black/50"
-                style={{ transform: `translateY(${scrollY * -0.5}px)` }}
+                style={{ transform: `translateY(${window.innerWidth < 768 ? 0 : scrollY * -0.5}px)` }}
               >
                 profesionales del derecho.
               </span>
@@ -1123,8 +1123,8 @@ function App() {
             style={{ transitionDelay: '1200ms' }}
           >
             {/* Paragraph Content (Parallax) */}
-            <div style={{ transform: `translateY(${scrollY * -0.3}px)` }}>
-              <p className="text-sm md:text-base text-black/60 leading-relaxed max-w-lg mb-10">
+            <div style={{ transform: `translateY(${window.innerWidth < 768 ? 0 : scrollY * -0.3}px)` }} className="flex flex-col items-center md:items-start">
+              <p className="text-sm md:text-base text-black/60 leading-relaxed max-w-lg mb-10 mx-auto md:mx-0">
                 La única IA legal que entiende el derecho mexicano. Entrenamos nuestro modelo 
                 para ajustarse a la tradición jurídica romano-canónica con criterio jurídico 
                 y sustento legal.
@@ -1147,7 +1147,7 @@ function App() {
       <section
         id="data"
         ref={dataRef}
-        className="relative min-h-screen flex items-center py-24 sm:py-32 px-6 sm:px-12 md:px-16 bg-neutral-50"
+        className="relative py-16 sm:py-24 px-6 sm:px-12 md:px-16 bg-neutral-50"
       >
         <div
           className={`relative z-10 w-full max-w-7xl mx-auto transition-all duration-1000 ${
@@ -1233,7 +1233,7 @@ function App() {
       <section
         id="video-showcase"
         ref={videoSectionRef}
-        className="relative min-h-screen flex flex-col items-center justify-center py-24 sm:py-32 px-6 sm:px-12 md:px-16 bg-white overflow-hidden"
+        className="relative flex flex-col items-center justify-center min-h-[120vh] py-16 sm:py-24 px-6 sm:px-12 md:px-16 bg-white overflow-hidden"
       >
         <div className="flex justify-between w-full max-w-7xl text-[10px] tracking-widest font-bold uppercase mb-20 text-black/90 px-0">
           <span>Experiencia Visual</span>
@@ -1246,8 +1246,8 @@ function App() {
           <div 
             className="text-center mb-24 transition-all duration-1000"
             style={{ 
-              opacity: Math.min(1, videoProgress * 1.5),
-              transform: `translateY(${(1 - Math.min(1, videoProgress)) * 30}px)`
+              opacity: Math.min(1, videoProgress * 1.2),
+              transform: `translateY(${(1 - Math.min(1, videoProgress * 1.2)) * 40}px)`
             }}
           >
             <h3 className="text-3xl sm:text-4xl md:text-6xl font-light mb-8">Mejora tu <span className="text-black/50">práctica legal</span></h3>
@@ -1262,8 +1262,8 @@ function App() {
             className="w-full cursor-pointer group"
             onClick={() => setIsModalOpen(true)}
             style={{ 
-              opacity: Math.min(1, videoProgress * 2),
-              transform: `scale(${window.innerWidth < 768 ? 0.9 : 0.4 + (Math.min(1, videoProgress) * 0.6)})`,
+              opacity: Math.min(1, videoProgress * 1.5),
+              transform: `scale(${window.innerWidth < 768 ? Math.min(1, 0.75 + videoProgress * 0.25) : Math.min(1, 0.3 + (videoProgress * 0.7))})`,
               willChange: 'transform, opacity'
             }}
           >
@@ -1304,7 +1304,7 @@ function App() {
       <section
         id="features"
         ref={featuresRef}
-        className="relative min-h-screen flex flex-col pt-20 px-8 md:px-16 bg-white overflow-hidden"
+        className="relative flex flex-col pt-16 pb-16 px-8 md:px-16 bg-white overflow-hidden"
       >
         {/* Top Navigation-like labels */}
         <div className="w-full max-w-7xl mx-auto mb-20">
@@ -1363,7 +1363,7 @@ function App() {
       <section
         id="security"
         ref={securityRef}
-        className="relative min-h-screen flex items-center py-32 px-8 md:px-16 bg-white"
+        className="relative flex items-center py-16 sm:py-24 px-8 md:px-16 bg-white"
       >
         <div
           className={`relative z-10 w-full max-w-7xl mx-auto transition-all duration-1000 ${
@@ -1371,12 +1371,12 @@ function App() {
           }`}
         >
           {/* Top Navigation-like labels */}
-          <div className="flex justify-between w-full text-[10px] tracking-widest font-bold uppercase mb-20 text-black/90">
+          <div className="flex justify-between w-full text-[10px] tracking-widest font-bold uppercase mb-8 md:mb-20 text-black/90">
             <span>Seguridad e Infraestructura</span>
             <span>(04)</span>
           </div>
 
-          <div className="mb-20">
+          <div className="mb-8 md:mb-20">
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-light leading-tight tracking-tight">
               Nos alineamos a los más altos estándares de seguridad.
             </h2>
@@ -1426,7 +1426,7 @@ function App() {
       <section
         id="tracking"
         ref={trackingRef}
-        className="relative min-h-[60vh] flex items-center py-32 px-8 md:px-16 bg-[#F9F9F8] overflow-hidden"
+        className="relative flex items-center py-16 px-8 md:px-16 bg-[#F9F9F8] overflow-hidden"
       >
         {/* Background Decorative Shape */}
         <div className="absolute inset-0 pointer-events-none opacity-[0.08] flex items-center justify-center overflow-hidden">
@@ -1565,7 +1565,7 @@ function App() {
       <section
         id="impact"
         ref={impactRef}
-        className="relative min-h-screen flex items-center py-32 px-8 md:px-16 bg-[#F9F9F8]"
+        className="relative flex items-center py-16 sm:py-24 px-8 md:px-16 bg-[#F9F9F8]"
       >
         <div 
           className={`relative z-10 w-full max-w-7xl mx-auto transition-all duration-1000 ${
@@ -1662,7 +1662,7 @@ function App() {
       <section
         id="about"
         ref={aboutRef}
-        className="relative min-h-screen flex items-center py-32 px-8 md:px-16 bg-white"
+        className="relative flex items-center py-16 sm:py-24 px-8 md:px-16 bg-white"
       >
         <div
           className={`relative z-10 w-full max-w-7xl mx-auto transition-all duration-1000 ${
@@ -1709,7 +1709,7 @@ function App() {
       <section
         id="faq"
         ref={faqRef}
-        className="relative min-h-[80vh] flex items-center py-32 px-8 md:px-16 bg-[#F9F9F8]"
+        className="relative flex items-center py-16 px-8 md:px-16 bg-[#F9F9F8]"
       >
         <div
           className={`relative z-10 w-full max-w-7xl mx-auto transition-all duration-1000 ${
