@@ -968,7 +968,7 @@ function App() {
             {/* Menu Button - Simplified Hamburger */}
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="w-10 h-10 flex items-center justify-center transition-all duration-300"
+              className={`w-10 h-10 flex items-center justify-center transition-all duration-300 ${menuOpen ? 'text-white' : 'text-black'}`}
               aria-label="Menu"
             >
               {menuOpen ? <X size={28} /> : <Menu size={28} />}
@@ -1052,7 +1052,7 @@ function App() {
             filter: startMainAnims ? 'blur(0px)' : 'blur(40px)'
           }}
         >
-          <div className="floating">
+          <div className={window.innerWidth < 768 ? "" : "floating"}>
             <img
               src="/images/hero-shape.png"
               alt="IUDEX"
