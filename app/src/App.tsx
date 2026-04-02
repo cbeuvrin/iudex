@@ -987,7 +987,7 @@ function App() {
       <header className={`absolute top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'bg-white/90 backdrop-blur-md' : 'bg-transparent'} ${introComplete ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
         <div className="flex items-center justify-between py-6 relative z-50">
           {/* Logo */}
-          <a href="#hero" onClick={() => scrollToSection('hero')} className="flex items-center relative z-50 pl-5 md:pl-8">
+          <a href="#hero" onClick={() => scrollToSection('hero')} className="flex items-center relative z-50 pl-5 md:pl-8 -ml-[10px] md:ml-0">
             <img src="/images/logo.png" alt="IUDEX" className="h-14 w-auto" />
           </a>
 
