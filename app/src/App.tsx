@@ -985,14 +985,14 @@ function App() {
 
       {/* Absolute Header with Logo and Menu */}
       <header className={`absolute top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'bg-white/90 backdrop-blur-md' : 'bg-transparent'} ${introComplete ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-        <div className="flex items-center justify-between px-8 py-6 relative z-50">
+        <div className="flex items-center justify-between py-6 relative z-50">
           {/* Logo */}
-          <a href="#hero" onClick={() => scrollToSection('hero')} className="flex items-center relative z-50">
+          <a href="#hero" onClick={() => scrollToSection('hero')} className="flex items-center relative z-50 pl-8">
             <img src="/images/logo.png" alt="IUDEX" className="h-14 w-auto" />
           </a>
 
           {/* Right side - Menu */}
-          <div className="flex items-center gap-3 relative z-50">
+          <div className="flex items-center gap-3 relative z-50 pr-8">
             {/* Menu Button - Simplified Hamburger */}
             <button
               onClick={() => setMenuOpen(!menuOpen)}
@@ -1561,15 +1561,15 @@ function App() {
 
             {/* Right: Coded iPhone Mockup (Minimalist) */}
             <div 
-              className="w-full lg:w-1/2 flex justify-center lg:justify-end relative"
+              className="w-full lg:w-1/2 flex justify-center lg:justify-end relative mt-8 lg:mt-0"
               style={{ 
                 opacity: Math.min(1, (trackingProgress - 0.3) * 3),
                 transform: `translateX(${(1 - Math.min(1, (trackingProgress - 0.3) * 2)) * 40}px)`,
               }}
             >
-              {/* Static ID Shape - Straight and Solid */}
+              {/* Static ID Shape — hidden on mobile */}
               <div 
-                className="absolute -top-8 -right-20 lg:-right-32 w-[600px] h-[600px] pointer-events-none z-0"
+                className="hidden lg:block absolute -top-8 -right-32 w-[600px] h-[600px] pointer-events-none z-0"
                 style={{ 
                   opacity: Math.min(1, (trackingProgress - 0.4) * 2),
                   transform: `scale(${0.9 + (trackingProgress * 0.35)})`,
@@ -1586,7 +1586,7 @@ function App() {
 
               {/* iPhone with Balanced Cinematic Entrance */}
               <div 
-                className="relative w-[280px] h-[580px] bg-[#0F0F0F] rounded-[3rem] border-[3px] border-[#2A2A2A] shadow-[0_40px_80px_-15px_rgba(0,0,0,0.2)] ring-1 ring-black/5 p-1.5 overflow-hidden z-10"
+                className="relative w-[200px] h-[410px] lg:w-[280px] lg:h-[580px] bg-[#0F0F0F] rounded-[3rem] border-[3px] border-[#2A2A2A] shadow-[0_40px_80px_-15px_rgba(0,0,0,0.2)] ring-1 ring-black/5 p-1.5 overflow-hidden z-10"
                 style={{ 
                   opacity: Math.min(1, (trackingProgress - 0.35) * 3),
                   transform: `translateY(${(1 - Math.min(1, (trackingProgress - 0.35) * 2)) * 40}px) scale(${0.95 + (trackingProgress * 0.05)})`,
