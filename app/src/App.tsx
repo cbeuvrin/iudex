@@ -1,11 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowRight, ArrowUpRight, User, X, Menu, Cookie } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, X, Menu, Cookie } from 'lucide-react';
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [visibleSections, setVisibleSections] = useState<Set<string>>(new Set());
   const [scrolled, setScrolled] = useState(false);
-  const [scrollY, setScrollY] = useState(0);
   
   // Preloader states
   const [loadingProgress, setLoadingProgress] = useState(0);
@@ -17,6 +15,15 @@ function App() {
   const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
   const [showPrivacy, setShowPrivacy] = useState(false);
   const [showTerms, setShowTerms] = useState(false);
+  
+  // Section progress states
+  const [featuresProgress, setFeaturesProgress] = useState(0);
+  const [dataProgress, setDataProgress] = useState(0);
+  const [securityProgress, setSecurityProgress] = useState(0);
+  const [trackingProgress, setTrackingProgress] = useState(0);
+  const [impactProgress, setImpactProgress] = useState(0);
+  const [aboutProgress, setAboutProgress] = useState(0);
+  const [faqProgress, setFaqProgress] = useState(0);
   
   useEffect(() => {
     const consent = localStorage.getItem('iudex-cookies');
@@ -48,14 +55,55 @@ function App() {
       cancelAnimationFrame(rafId);
       rafId = requestAnimationFrame(() => {
         setScrolled(window.scrollY > 50);
-        setScrollY(window.scrollY);
 
         if (videoSectionRef.current) {
           const rect = videoSectionRef.current.getBoundingClientRect();
           const viewportHeight = window.innerHeight;
           let progress = (viewportHeight - rect.top) / (viewportHeight);
-          progress = Math.max(0, Math.min(1.2, progress));
-          setVideoProgress(progress);
+          setVideoProgress(Math.max(0, Math.min(1.2, progress)));
+        }
+
+        if (featuresRef.current) {
+          const rect = featuresRef.current.getBoundingClientRect();
+          const p = (window.innerHeight - rect.top) / window.innerHeight;
+          setFeaturesProgress(Math.max(0, Math.min(2, p)));
+        }
+
+        if (dataRef.current) {
+          const rect = dataRef.current.getBoundingClientRect();
+          const sectionHeight = dataRef.current.offsetHeight;
+          const p = (window.innerHeight - rect.top) / (sectionHeight * 0.35);
+          setDataProgress(Math.max(0, Math.min(8, p)));
+        }
+
+        if (securityRef.current) {
+          const rect = securityRef.current.getBoundingClientRect();
+          const p = (window.innerHeight - rect.top) / window.innerHeight;
+          setSecurityProgress(Math.max(0, Math.min(2, p)));
+        }
+
+        if (trackingRef.current) {
+          const rect = trackingRef.current.getBoundingClientRect();
+          const p = (window.innerHeight - rect.top) / window.innerHeight;
+          setTrackingProgress(Math.max(0, Math.min(2, p)));
+        }
+
+        if (impactRef.current) {
+          const rect = impactRef.current.getBoundingClientRect();
+          const p = (window.innerHeight - rect.top) / window.innerHeight;
+          setImpactProgress(Math.max(0, Math.min(2, p)));
+        }
+
+        if (aboutRef.current) {
+          const rect = aboutRef.current.getBoundingClientRect();
+          const p = (window.innerHeight - rect.top) / window.innerHeight;
+          setAboutProgress(Math.max(0, Math.min(2, p)));
+        }
+
+        if (faqRef.current) {
+          const rect = faqRef.current.getBoundingClientRect();
+          const p = (window.innerHeight - rect.top) / window.innerHeight;
+          setFaqProgress(Math.max(0, Math.min(2, p)));
         }
       });
     };
@@ -67,50 +115,40 @@ function App() {
     };
   }, []);
 
-  // Section Observer
+  // Cinematic preloader - shows once per browser session
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setVisibleSections((prev) => new Set(prev).add(entry.target.id));
-          } else {
-            setVisibleSections((prev) => {
-              const next = new Set(prev);
-              next.delete(entry.target.id);
-              return next;
-            });
-          }
-        });
-      },
-      { threshold: 0.05, rootMargin: '0px' }
-    );
+    const hasSeenIntro = sessionStorage.getItem('iudex-intro-seen');
+    if (hasSeenIntro) {
+      setTimeout(() => {
+        setIntroComplete(true);
+        setLoadingProgress(100);
+        setTimeout(() => setStartMainAnims(true), 100);
+      }, 50);
+      return;
+    }
 
-    const sections = [heroRef, videoSectionRef, dataRef, featuresRef, securityRef, trackingRef, impactRef, aboutRef, faqRef];
-    sections.forEach((ref) => {
-      if (ref.current) observer.observe(ref.current);
-    });
+    const totalDuration = 1800; // 1.8 seconds total
+    const startTime = performance.now();
 
-    return () => observer.disconnect();
-  }, []);
+    const animate = (now: number) => {
+      const elapsed = now - startTime;
+      const t = Math.min(1, elapsed / totalDuration);
+      // Ease-in-out cubic: slow → fast → slow
+      const eased = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+      setLoadingProgress(Math.floor(eased * 100));
 
-  // Simulated loading logic for cinematic intro
-  useEffect(() => {
-    let progress = 0;
-    const interval = setInterval(() => {
-      progress += Math.random() * 12;
-      if (progress >= 100) {
-        progress = 100;
-        clearInterval(interval);
-        setTimeout(() => {
-          setIntroComplete(true);
-          // Scale down the ID and start text animations shortly after black screen fades
-          setTimeout(() => setStartMainAnims(true), 100);
-        }, 800); 
+      if (t < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        setLoadingProgress(100);
+        setIntroComplete(true);
+        sessionStorage.setItem('iudex-intro-seen', 'true');
+        setTimeout(() => setStartMainAnims(true), 150);
       }
-      setLoadingProgress(Math.floor(progress));
-    }, 500 / 10); // Sped up: ~0.5s total loading time
-    return () => clearInterval(interval);
+    };
+
+    const rafId = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(rafId);
   }, []);
 
   const scrollToSection = (id: string) => {
@@ -927,12 +965,15 @@ function App() {
           <img 
             src="/images/preloader-logo.png" 
             alt="IUDEX Logo" 
-            className={`h-16 w-auto mx-auto mb-12 transition-all duration-500 ${loadingProgress > 10 ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
+            className={`h-16 w-auto mx-auto mb-12 transition-all duration-700 ${loadingProgress > 5 ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
           />
           <div className="relative w-full h-[1px] bg-white/10 rounded-full overflow-hidden mb-4">
             <div 
-              className="absolute h-full bg-white transition-all duration-500 ease-out shadow-[0_0_10px_rgba(255,255,255,0.8)]" 
-              style={{ width: `${loadingProgress}%` }}
+              className="absolute h-full bg-white/70" 
+              style={{ 
+                width: `${loadingProgress}%`,
+                transition: 'width 0.12s ease-out'
+              }}
             />
           </div>
           <div className="flex justify-between items-center text-white/20 text-[9px] uppercase tracking-[0.4em] font-light">
@@ -942,36 +983,23 @@ function App() {
         </div>
       </div>
 
-      {/* Fixed Header with Logo and Menu */}
-      <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'bg-white/90 backdrop-blur-md' : 'bg-transparent'} ${introComplete ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-        <div className="flex items-center justify-between px-8 py-6">
+      {/* Absolute Header with Logo and Menu */}
+      <header className={`absolute top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'bg-white/90 backdrop-blur-md' : 'bg-transparent'} ${introComplete ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+        <div className="flex items-center justify-between px-8 py-6 relative z-50">
           {/* Logo */}
-          <a href="#hero" onClick={() => scrollToSection('hero')} className="flex items-center">
+          <a href="#hero" onClick={() => scrollToSection('hero')} className="flex items-center relative z-50">
             <img src="/images/logo.png" alt="IUDEX" className="h-14 w-auto" />
           </a>
 
-          {/* Right side - Login & Menu */}
-          <div className="flex items-center gap-3">
-            {/* Iniciar Sesión - Desktop Button */}
-            <a
-              href="https://chat.iudex.mx"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hidden md:flex items-center gap-2 px-6 py-2 rounded-full border border-black/20 hover:bg-black hover:text-white transition-all duration-300 text-xs uppercase tracking-[0.2em] font-medium"
-            >
-              <User size={14} />
-              Iniciar Sesión
-            </a>
-
-
-
+          {/* Right side - Menu */}
+          <div className="flex items-center gap-3 relative z-50">
             {/* Menu Button - Simplified Hamburger */}
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className={`w-10 h-10 flex items-center justify-center transition-all duration-300 ${menuOpen ? 'text-white' : 'text-black'}`}
+              className="w-12 h-12 flex items-center justify-center transition-all duration-300 text-black z-[60]"
               aria-label="Menu"
             >
-              {menuOpen ? <X size={28} /> : <Menu size={28} />}
+              {menuOpen ? <X size={32} className="text-white" /> : <Menu size={32} />}
             </button>
           </div>
         </div>
@@ -1006,7 +1034,6 @@ function App() {
                   menuOpen ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'
                 }`}
                 style={{ 
-                  transition: 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1)',
                   transitionDelay: `${(index * 0.1) + 0.3}s` 
                 }}
               >
@@ -1036,11 +1063,11 @@ function App() {
       <section
         id="hero"
         ref={heroRef}
-        className="relative min-h-screen flex items-center justify-center bg-white"
+        className="relative min-h-screen bg-white"
       >
         {/* Central Hero Shape - ID Large with Multi-stage Cinematic Transition */}
         <div 
-          className="absolute left-1/2 top-1/2 pointer-events-none transform"
+          className="absolute left-1/2 top-1/2 pointer-events-none transform z-0"
           style={{ 
             transition: 'transform 6s cubic-bezier(0.16, 1, 0.3, 1), opacity 1.5s ease-out, filter 3s ease-out',
             transform: `translate(-50%, -50%) ${
@@ -1062,61 +1089,60 @@ function App() {
           </div>
         </div>
 
-        {/* Hero Content - Raised position geared for mobile centering */}
-        <div className="absolute bottom-10 md:bottom-32 left-0 md:left-16 w-full md:max-w-4xl px-8 md:px-0 text-center md:text-left pointer-events-none">
+        {/* Hero Content - absolute bottom anchored, definitively away from top */}
+        <div 
+          className="absolute bottom-8 md:bottom-14 left-8 md:left-16 w-full max-w-2xl md:max-w-3xl pr-8 text-left pointer-events-none z-10"
+          style={{ 
+            opacity: startMainAnims ? 1 : 0,
+            transition: 'opacity 0.8s ease-out'
+          }}
+        >
           {/* Badge */}
           <div 
-            className={`flex items-center justify-center md:justify-start gap-3 mb-8 transition-all duration-500 cubic-bezier(0.16, 1, 0.3, 1) ${
-              startMainAnims ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
-            }`}
-            style={{ transitionDelay: '0ms' }}
+            style={{
+              opacity: startMainAnims ? 1 : 0,
+              transform: startMainAnims ? 'translateY(0px)' : 'translateY(16px)',
+              transition: 'opacity 1.0s ease-out, transform 1.0s ease-out',
+              transitionDelay: '200ms'
+            }}
+            className="flex items-center justify-start gap-3 mb-8"
           >
             <div className="hidden md:block w-8 h-[1px] bg-black/40" />
             <span className="text-black/50 text-xs tracking-[0.2em] uppercase">Inteligencia Artificial</span>
           </div>
 
           <h1 className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-light tracking-tight mb-12">
-            {/* Title Line 1 Wrapper (Entrance) */}
             <div 
-              className={`transition-all duration-500 cubic-bezier(0.16, 1, 0.3, 1) ${
-                startMainAnims ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
-              }`}
-              style={{ transitionDelay: '100ms' }}
+              style={{
+                opacity: startMainAnims ? 1 : 0,
+                transform: startMainAnims ? 'translateY(0px)' : 'translateY(20px)',
+                transition: 'opacity 1.2s ease-out, transform 1.2s ease-out',
+                transitionDelay: '400ms'
+              }}
             >
-              {/* Line 1 Content (Parallax) */}
-              <span 
-                className="block"
-                style={{ transform: `translateY(${window.innerWidth < 768 ? 0 : scrollY * -0.6}px)` }}
-              >
-                Diseñado para
-              </span>
+              <span className="block">Diseñado para</span>
             </div>
-            {/* Title Line 2 Wrapper (Entrance) */}
             <div 
-              className={`transition-all duration-500 cubic-bezier(0.16, 1, 0.3, 1) ${
-                startMainAnims ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
-              }`}
-              style={{ transitionDelay: '200ms' }}
+              style={{
+                opacity: startMainAnims ? 1 : 0,
+                transform: startMainAnims ? 'translateY(0px)' : 'translateY(20px)',
+                transition: 'opacity 1.2s ease-out, transform 1.2s ease-out',
+                transitionDelay: '600ms'
+              }}
             >
-              {/* Line 2 Content (Parallax) */}
-              <span 
-                className="block text-black/50"
-                style={{ transform: `translateY(${window.innerWidth < 768 ? 0 : scrollY * -0.5}px)` }}
-              >
-                profesionales del derecho.
-              </span>
+              <span className="block text-black/50">profesionales del derecho.</span>
             </div>
           </h1>
 
-          {/* Paragraph Wrapper (Entrance) */}
           <div
-            className={`transition-all duration-500 cubic-bezier(0.16, 1, 0.3, 1) ${
-              startMainAnims ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-16'
-            }`}
-            style={{ transitionDelay: '300ms' }}
+            style={{
+              opacity: startMainAnims ? 1 : 0,
+              transform: startMainAnims ? 'translateY(0px)' : 'translateY(16px)',
+              transition: 'opacity 1.0s ease-out, transform 1.0s ease-out',
+              transitionDelay: '800ms'
+            }}
           >
-            {/* Paragraph Content (Parallax) */}
-            <div style={{ transform: `translateY(${window.innerWidth < 768 ? 0 : scrollY * -0.3}px)` }} className="flex flex-col items-center md:items-start">
+            <div className="flex flex-col items-center md:items-start">
               <p className="text-sm md:text-base text-black/60 leading-relaxed max-w-lg mb-10 mx-auto md:mx-0">
                 La única IA legal que entiende el derecho mexicano. Entrenamos nuestro modelo 
                 para ajustarse a la tradición jurídica romano-canónica con criterio jurídico 
@@ -1135,7 +1161,6 @@ function App() {
         </div>
       </section>
 
-
       {/* Data Section */}
       <section
         id="data"
@@ -1143,23 +1168,36 @@ function App() {
         className="relative py-16 sm:py-24 px-6 sm:px-12 md:px-16 bg-neutral-50"
       >
         <div
-          className={`relative z-10 w-full max-w-7xl mx-auto transition-all duration-500 ${
-            visibleSections.has('data') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-          }`}
+          className="relative z-10 w-full max-w-7xl mx-auto"
         >
-          {/* Top Navigation-like labels */}
-          <div className="flex justify-between w-full text-[10px] tracking-widest font-bold uppercase mb-20 text-black/90">
+          {/* Top Navigation-like labels - enters first, very subtle */}
+          <div 
+            className="flex justify-between w-full text-[10px] tracking-widest font-bold uppercase mb-20 text-black/90"
+            style={{ 
+              opacity: Math.min(1, dataProgress * 1.2),
+              transform: `translateY(${(1 - Math.min(1, dataProgress * 1.2)) * 15}px)`,
+              willChange: 'transform, opacity'
+            }}
+          >
             <span>Base de Datos Jurídica</span>
             <span>(01)</span>
           </div>
 
-          <div className="mb-20">
+          {/* Title - enters slightly after labels */}
+          <div 
+            className="mb-20"
+            style={{ 
+              opacity: Math.min(1, (dataProgress - 0.1) * 1.5),
+              transform: `translateY(${(1 - Math.min(1, (dataProgress - 0.1) * 1.5)) * 20}px)`,
+              willChange: 'transform, opacity'
+            }}
+          >
             <h2 className="text-3xl sm:text-4xl md:text-6xl font-light">
               Conocimiento <span className="text-black/50">jurídico</span>
             </h2>
           </div>
 
-          {/* Knowledge Items Grid Styled like Reference */}
+          {/* Knowledge Items Grid - each item enters on its own scroll step */}
           <div className="space-y-0">
             {knowledgeItems.map((item, index) => (
               <div 
@@ -1170,35 +1208,41 @@ function App() {
                   borderTopStyle: 'dashed' 
                 }}
               >
-                {/* Left: Stat */}
+                {/* Left: Stat — first to appear */}
                 <div 
-                  className={`w-full md:w-32 lg:w-48 flex-shrink-0 transition-all duration-500 cubic-bezier(0.16, 1, 0.3, 1) ${
-                    visibleSections.has('data') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
-                  }`}
-                  style={{ transitionDelay: `${(index * 0.1) + 0.1}s` }}
+                  className="w-full md:w-32 lg:w-48 flex-shrink-0"
+                  style={{ 
+                    opacity: Math.min(1, (dataProgress - (index * 0.8)) * 1.5),
+                    transform: `translateY(${(1 - Math.min(1, (dataProgress - (index * 0.8)) * 1.2)) * 20}px)`,
+                    willChange: 'transform, opacity'
+                  }}
                 >
                   <div className="text-6xl md:text-7xl font-bold tracking-tighter mb-1 leading-none">{item.value}</div>
                   <div className="text-[10px] font-bold tracking-[0.1em] uppercase text-black/40">{item.label}</div>
                 </div>
 
-                {/* Middle: Description */}
+                {/* Middle: Description — enters slightly later */}
                 <div 
-                  className={`flex-1 transition-all duration-500 cubic-bezier(0.16, 1, 0.3, 1) ${
-                    visibleSections.has('data') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
-                  }`}
-                  style={{ transitionDelay: `${(index * 0.1) + 0.3}s` }}
+                  className="flex-1"
+                  style={{ 
+                    opacity: Math.min(1, (dataProgress - (index * 0.8) - 0.15) * 1.5),
+                    transform: `translateY(${(1 - Math.min(1, (dataProgress - (index * 0.8) - 0.15) * 1.2)) * 20}px)`,
+                    willChange: 'transform, opacity'
+                  }}
                 >
                   <p className="text-lg md:text-xl text-black/80 leading-snug font-normal max-w-2xl">
                     {item.description}
                   </p>
                 </div>
 
-                {/* Right: Source and Tags */}
+                {/* Right: Source and Tags — last to arrive */}
                 <div 
-                  className={`w-full md:w-64 flex-shrink-0 flex flex-col items-start md:items-end text-left md:text-right transition-all duration-500 cubic-bezier(0.16, 1, 0.3, 1) ${
-                    visibleSections.has('data') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
-                  }`}
-                  style={{ transitionDelay: `${(index * 0.1) + 0.5}s` }}
+                  className="w-full md:w-64 flex-shrink-0 flex flex-col items-start md:items-end text-left md:text-right"
+                  style={{ 
+                    opacity: Math.min(1, (dataProgress - (index * 0.8) - 0.3) * 1.5),
+                    transform: `translateY(${(1 - Math.min(1, (dataProgress - (index * 0.8) - 0.3) * 1.2)) * 20}px)`,
+                    willChange: 'transform, opacity'
+                  }}
                 >
                   <div className="mb-4">
                     <div className="text-sm font-bold tracking-wider uppercase mb-1">{item.source}</div>
@@ -1253,11 +1297,18 @@ function App() {
           <div 
             className="w-full cursor-pointer group"
             onClick={() => setIsModalOpen(true)}
-            style={{ 
-              opacity: Math.min(1, videoProgress * 1.5),
-              transform: `scale(${window.innerWidth < 768 ? Math.min(1, 0.75 + videoProgress * 0.25) : Math.min(1, 0.3 + (videoProgress * 0.7))})`,
-              willChange: 'transform, opacity'
-            }}
+            style={(() => {
+              // Zoom spans from progress 0.1 to 1.2 — slower, more gradual
+              const zoomP = Math.max(0, Math.min(1, (videoProgress - 0.1) / 1.1));
+              const easedP = Math.pow(zoomP, 0.7);
+              const scaleDesktop = 0.72 + easedP * 0.28;
+              const scaleMobile = 0.82 + easedP * 0.18;
+              return {
+                opacity: Math.min(1, videoProgress * 3),
+                transform: `scale(${window.innerWidth < 768 ? scaleMobile : scaleDesktop})`,
+                willChange: 'transform, opacity'
+              };
+            })()}
           >
             <div className="relative mx-auto w-full max-w-4xl shadow-2xl rounded-[2.5rem] overflow-hidden border border-neutral-200 transition-transform duration-500 group-hover:scale-[1.02]">
               {/* Monitor Body */}
@@ -1308,27 +1359,39 @@ function App() {
 
         {/* Main Large Heading (Full Width) */}
         <div 
-          className={`w-full transition-all duration-500 ${
-            visibleSections.has('features') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
-          }`}
+          className="w-full"
+          style={{ 
+            opacity: Math.min(1, featuresProgress * 1.5),
+            transform: `translateY(${(1 - Math.min(1, featuresProgress * 1.5)) * 40}px)`,
+          }}
         >
           <h2 className="text-4xl md:text-7xl lg:text-[110px] font-light leading-[1] tracking-tighter text-black w-full text-center md:text-left">
-            <span className="text-black">Redacta</span>{" "}
-            <span className={`transition-colors duration-500 delay-150 ${visibleSections.has('features') ? 'text-black/10' : 'text-black'}`}>con precisión,</span> 
-            <span className="text-black"> resuelve</span>{" "}
-            <span className={`transition-colors duration-500 delay-200 ${visibleSections.has('features') ? 'text-black/10' : 'text-black'}`}>consultas,</span> 
-            <span className="text-black"> aprende</span>{" "}
-            <span className={`transition-colors duration-500 delay-250 ${visibleSections.has('features') ? 'text-black/10' : 'text-black'}`}>de cada caso y</span> 
-            <span className="text-black"> protege</span>{" "}
-            <span className={`transition-colors duration-500 delay-250 ${visibleSections.has('features') ? 'text-black/10' : 'text-black'}`}>tu información sensible con absoluta seguridad.</span>
+            {/* Key verb - always black */}
+            <span style={{ color: 'black', transition: 'color 1.2s ease' }}>Redacta</span>{" "}
+            {/* Filler - fades out after scroll > 0.8 */}
+            <span style={{ color: featuresProgress > 0.8 ? 'rgba(0,0,0,0.12)' : 'black', transition: 'color 1.2s ease' }}>con precisión,</span>{" "}
+            {/* Key verb - always black */}
+            <span style={{ color: 'black', transition: 'color 1.2s ease' }}>resuelve</span>{" "}
+            {/* Filler */}
+            <span style={{ color: featuresProgress > 0.8 ? 'rgba(0,0,0,0.12)' : 'black', transition: 'color 1.2s ease' }}>consultas,</span>{" "}
+            {/* Key verb - always black */}
+            <span style={{ color: 'black', transition: 'color 1.2s ease' }}>aprende</span>{" "}
+            {/* Filler */}
+            <span style={{ color: featuresProgress > 0.8 ? 'rgba(0,0,0,0.12)' : 'black', transition: 'color 1.2s ease' }}>de cada caso y</span>{" "}
+            {/* Key verb - always black */}
+            <span style={{ color: 'black', transition: 'color 1.2s ease' }}>protege</span>{" "}
+            {/* Filler */}
+            <span style={{ color: featuresProgress > 0.8 ? 'rgba(0,0,0,0.12)' : 'black', transition: 'color 1.2s ease' }}>tu información sensible con absoluta seguridad.</span>
           </h2>
         </div>
 
         {/* Middle Smaller Text (Right Aligned per user request) */}
         <div 
-          className={`w-full max-w-sm ml-auto text-right mt-12 md:mt-20 mb-8 md:mb-32 space-y-8 transition-all duration-500 delay-100 ${
-            visibleSections.has('features') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-          }`}
+          className="w-full max-w-sm ml-auto text-right mt-12 md:mt-20 mb-8 md:mb-32 space-y-8"
+          style={{ 
+            opacity: Math.min(1, (featuresProgress - 0.3) * 2),
+            transform: `translateY(${(1 - Math.min(1, (featuresProgress - 0.3) * 2)) * 30}px)`,
+          }}
         >
           <div className="space-y-6">
             <p className="text-sm md:text-base text-black/60 leading-relaxed">
@@ -1341,8 +1404,8 @@ function App() {
               {/* Animated Line Move from Slider - Now full width and thicker */}
               <div className="relative h-[2px] bg-black/10 w-full overflow-hidden">
                 <div 
-                  className="absolute top-0 right-0 h-full bg-black/60 transition-all duration-[1500ms] delay-150"
-                  style={{ width: visibleSections.has('features') ? '100%' : '0%' }}
+                  className="absolute top-0 right-0 h-full bg-black/60 transition-all duration-[1500ms] ease-out"
+                  style={{ width: `${Math.min(100, featuresProgress * 100)}%` }}
                 />
               </div>
             </div>
@@ -1358,9 +1421,11 @@ function App() {
         className="relative flex items-center pt-0 pb-16 sm:py-24 px-8 md:px-16 bg-white"
       >
         <div
-          className={`relative z-10 w-full max-w-7xl mx-auto transition-all duration-500 ${
-            visibleSections.has('security') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-          }`}
+          className="relative z-10 w-full max-w-7xl mx-auto"
+          style={{ 
+            opacity: Math.min(1, securityProgress * 2),
+            transform: `translateY(${(1 - Math.min(1, securityProgress * 2)) * 30}px)`,
+          }}
         >
           {/* Top Navigation-like labels */}
           <div className="flex justify-between w-full text-[10px] tracking-widest font-bold uppercase mb-8 md:mb-20 text-black/90">
@@ -1378,10 +1443,11 @@ function App() {
             {securityStandards.map((item, index) => (
               <div 
                 key={item.id} 
-                className={`border-b border-black/10 transition-all duration-500 cubic-bezier(0.16, 1, 0.3, 1) ${
-                  visibleSections.has('security') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
-                }`}
-                style={{ transitionDelay: `${(index * 0.15) + 0.3}s` }}
+                className="border-b border-black/10"
+                style={{ 
+                   opacity: Math.min(1, (securityProgress - (index * 0.1) - 0.2) * 3),
+                   transform: `translateY(${(1 - Math.min(1, (securityProgress - (index * 0.1) - 0.2) * 2)) * 40}px)`,
+                }}
               >
                 <button
                   onClick={() => setOpenAccordion(openAccordion === item.id ? null : item.id)}
@@ -1422,7 +1488,14 @@ function App() {
       >
         {/* Background Decorative Shape */}
         <div className="absolute inset-0 pointer-events-none opacity-[0.08] flex items-center justify-center overflow-hidden">
-          <div className="background-float">
+          <div 
+            className="background-float"
+            style={{ 
+              opacity: Math.min(1, trackingProgress * 1.5),
+              transform: `scale(${0.8 + trackingProgress * 0.4}) rotate(${12 + trackingProgress * 5}deg)`,
+              filter: `blur(${40 - Math.min(40, trackingProgress * 80)}px)`
+            }}
+          >
             <img 
               src="/images/hero-shape.png" 
               alt="" 
@@ -1433,9 +1506,11 @@ function App() {
         </div>
 
         <div
-          className={`relative z-10 w-full max-w-7xl mx-auto transition-all duration-500 ${
-            visibleSections.has('tracking') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-          }`}
+          className="relative z-10 w-full max-w-7xl mx-auto"
+          style={{ 
+            opacity: Math.min(1, trackingProgress * 2),
+            transform: `translateY(${(1 - Math.min(1, trackingProgress * 2)) * 30}px)`,
+          }}
         >
           {/* Top Navigation-like labels */}
           <div className="flex justify-between w-full text-[10px] tracking-widest font-bold uppercase mb-20 text-black/90">
@@ -1444,7 +1519,13 @@ function App() {
           </div>
           <div className="flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-24">
             {/* Left: Content */}
-            <div className="w-full lg:w-1/2 flex flex-col items-start text-left">
+            <div 
+              className="w-full lg:w-1/2 flex flex-col items-start text-left"
+              style={{ 
+                opacity: Math.min(1, (trackingProgress - 0.2) * 3),
+                transform: `translateX(${(1 - Math.min(1, (trackingProgress - 0.2) * 2)) * -40}px)`,
+              }}
+            >
               <div className="inline-flex items-center gap-2 bg-white px-3 py-1.5 rounded-lg border border-black/5 shadow-sm mb-8">
                 <div className="w-2.5 h-2.5 bg-[#E2E2E2] rounded-sm" />
                 <span className="text-[10px] font-bold tracking-[0.1em] uppercase text-black/60">LA PLATAFORMA INTEGRADA</span>
@@ -1479,13 +1560,21 @@ function App() {
             </div>
 
             {/* Right: Coded iPhone Mockup (Minimalist) */}
-            <div className="w-full lg:w-1/2 flex justify-center lg:justify-end relative">
+            <div 
+              className="w-full lg:w-1/2 flex justify-center lg:justify-end relative"
+              style={{ 
+                opacity: Math.min(1, (trackingProgress - 0.3) * 3),
+                transform: `translateX(${(1 - Math.min(1, (trackingProgress - 0.3) * 2)) * 40}px)`,
+              }}
+            >
               {/* Static ID Shape - Straight and Solid */}
               <div 
-                className={`absolute top-1/2 -right-20 lg:-right-32 -translate-y-1/2 w-[600px] h-[600px] pointer-events-none opacity-100 z-0 transition-all duration-[1200ms] cubic-bezier(0.16, 1, 0.3, 1) ${
-                  visibleSections.has('tracking') ? 'opacity-100 scale-125' : 'opacity-0 scale-95 blur-xl'
-                }`}
-                style={{ transitionDelay: '0.4s' }}
+                className="absolute -top-8 -right-20 lg:-right-32 w-[600px] h-[600px] pointer-events-none z-0"
+                style={{ 
+                  opacity: Math.min(1, (trackingProgress - 0.4) * 2),
+                  transform: `scale(${0.9 + (trackingProgress * 0.35)})`,
+                  filter: `blur(${20 - Math.min(20, trackingProgress * 40)}px)`,
+                }}
               >
                 <img 
                   src="/images/hero-shape.png" 
@@ -1497,12 +1586,10 @@ function App() {
 
               {/* iPhone with Balanced Cinematic Entrance */}
               <div 
-                className={`relative w-[280px] h-[580px] bg-[#0F0F0F] rounded-[3rem] border-[3px] border-[#2A2A2A] shadow-[0_40px_80px_-15px_rgba(0,0,0,0.2)] ring-1 ring-black/5 p-1.5 overflow-hidden z-10 ${
-                  visibleSections.has('tracking') ? 'opacity-100 translate-y-0 blur-0' : 'opacity-0 translate-y-8 blur-lg'
-                }`}
+                className="relative w-[280px] h-[580px] bg-[#0F0F0F] rounded-[3rem] border-[3px] border-[#2A2A2A] shadow-[0_40px_80px_-15px_rgba(0,0,0,0.2)] ring-1 ring-black/5 p-1.5 overflow-hidden z-10"
                 style={{ 
-                  transition: 'all 1200ms cubic-bezier(0.16, 1, 0.3, 1)',
-                  transitionDelay: '400ms'
+                  opacity: Math.min(1, (trackingProgress - 0.35) * 3),
+                  transform: `translateY(${(1 - Math.min(1, (trackingProgress - 0.35) * 2)) * 40}px) scale(${0.95 + (trackingProgress * 0.05)})`,
                 }}
               >
                 {/* Subtle Dynamic Island */}
@@ -1560,9 +1647,11 @@ function App() {
         className="relative flex items-center py-16 sm:py-24 px-8 md:px-16 bg-[#F9F9F8]"
       >
         <div 
-          className={`relative z-10 w-full max-w-7xl mx-auto transition-all duration-500 ${
-            visibleSections.has('impact') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-          }`}
+          className="relative z-10 w-full max-w-7xl mx-auto"
+          style={{ 
+            opacity: Math.min(1, impactProgress * 2),
+            transform: `translateY(${(1 - Math.min(1, impactProgress * 2)) * 30}px)`,
+          }}
         >
           {/* Header */}
           <div className="flex justify-between w-full text-[10px] tracking-widest font-bold uppercase mb-24 text-black/90">
@@ -1572,7 +1661,13 @@ function App() {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 lg:gap-32">
             {/* Column 1: Calidad y Velocidad */}
-            <div className="space-y-20">
+            <div 
+              className="space-y-20"
+              style={{ 
+                opacity: Math.min(1, (impactProgress - 0.2) * 3),
+                transform: `translateY(${(1 - Math.min(1, (impactProgress - 0.2) * 2)) * 40}px)`,
+              }}
+            >
               <div className="space-y-4">
                 <span className="text-black/40 text-[10px] font-bold tracking-[0.2em] uppercase text-left block">Efectividad Operativa</span>
                 <h3 className="text-4xl md:text-5xl font-light tracking-tight leading-tight text-left">
@@ -1588,13 +1683,12 @@ function App() {
                 ].map((stat, i) => (
                   <div 
                     key={i} 
-                    className={`flex items-start gap-8 group py-10 ${i !== 0 ? 'border-t border-black/10' : ''} transition-all duration-500 ${
-                      visibleSections.has('impact') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
-                    }`}
+                    className="flex items-start gap-8 group py-10 border-t border-black/10"
                     style={{ 
                       borderColor: 'rgba(0,0,0,0.1)',
                       borderTopStyle: 'dashed',
-                      transitionDelay: `${i * 0.15 + 0.2}s`
+                      opacity: Math.min(1, (impactProgress - 0.3 - (i * 0.1)) * 3),
+                      transform: `translateY(${(1 - Math.min(1, (impactProgress - 0.3 - (i * 0.1)) * 2)) * 30}px)`,
                     }}
                   >
                     <div className="text-5xl md:text-6xl font-bold tracking-tighter text-black/20 group-hover:text-black transition-colors duration-500 w-32 shrink-0">
@@ -1610,7 +1704,13 @@ function App() {
             </div>
 
             {/* Column 2: Eficiencia y Retorno */}
-            <div className="space-y-20">
+            <div 
+              className="space-y-20"
+              style={{ 
+                opacity: Math.min(1, (impactProgress - 0.4) * 3),
+                transform: `translateY(${(1 - Math.min(1, (impactProgress - 0.4) * 2)) * 40}px)`,
+              }}
+            >
               <div className="space-y-4">
                 <span className="text-black/40 text-[10px] font-bold tracking-[0.2em] uppercase text-left block">Impacto en el Flujo</span>
                 <h3 className="text-4xl md:text-5xl font-light tracking-tight leading-tight text-left">
@@ -1622,17 +1722,16 @@ function App() {
                 {[
                   { label: "Uso recurrente", value: "92%", desc: "de los usuarios integran la herramienta en su flujo de trabajo diario." },
                   { label: "Revisión manual", value: "20+", desc: "horas promedio de revisión manual ahorradas al mes por abogado." },
-                  { label: "Recuperación de tiempo", value: "4+", desc: "horas semanales recuperadas de tareas administrativas no facturables." }
+                  { label: "Recuperación de tiempo", value: "4+", desc: "horas semanalas recuperadas de tareas administrativas no facturables." }
                 ].map((stat, i) => (
                    <div 
                     key={i} 
-                    className={`flex items-start gap-8 group py-10 ${i !== 0 ? 'border-t border-black/10' : ''} transition-all duration-500 ${
-                      visibleSections.has('impact') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
-                    }`}
+                    className="flex items-start gap-8 group py-10 border-t border-black/10"
                     style={{ 
                       borderColor: 'rgba(0,0,0,0.1)',
                       borderTopStyle: 'dashed',
-                      transitionDelay: `${i * 0.15 + 0.5}s`
+                      opacity: Math.min(1, (impactProgress - 0.5 - (i * 0.1)) * 3),
+                      transform: `translateY(${(1 - Math.min(1, (impactProgress - 0.5 - (i * 0.1)) * 2)) * 30}px)`,
                     }}
                   >
                     <div className="text-5xl md:text-6xl font-bold tracking-tighter text-black/20 group-hover:text-black transition-colors duration-500 w-32 shrink-0">
@@ -1657,9 +1756,11 @@ function App() {
         className="relative flex items-center py-16 sm:py-24 px-8 md:px-16 bg-white"
       >
         <div
-          className={`relative z-10 w-full max-w-7xl mx-auto transition-all duration-500 ${
-            visibleSections.has('about') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-          }`}
+          className="relative z-10 w-full max-w-7xl mx-auto"
+          style={{ 
+            opacity: Math.min(1, aboutProgress * 2),
+            transform: `translateY(${(1 - Math.min(1, aboutProgress * 2)) * 30}px)`,
+          }}
         >
           {/* Top Navigation-like labels */}
           <div className="flex justify-between w-full text-[10px] tracking-widest font-bold uppercase mb-20 text-black/90">
@@ -1668,23 +1769,35 @@ function App() {
           </div>
 
           <div className="text-center mb-20 overflow-hidden">
-            <h2 className={`text-4xl md:text-5xl lg:text-6xl font-light mb-8 transition-all duration-500 cubic-bezier(0.16, 1, 0.3, 1) ${
-              visibleSections.has('about') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
-            }`}>
+            <h2 
+              className="text-4xl md:text-5xl lg:text-6xl font-light mb-8"
+              style={{ 
+                opacity: Math.min(1, (aboutProgress - 0.2) * 3),
+                transform: `translateY(${(1 - Math.min(1, (aboutProgress - 0.2) * 2)) * 40}px)`,
+              }}
+            >
               Construyendo el <span className="text-black/50">futuro del</span> Derecho.
             </h2>
           </div>
 
           <div className="max-w-3xl mx-auto text-center">
-            <p className={`text-xl text-black/60 leading-relaxed mb-12 text-center transition-all duration-500 cubic-bezier(0.16, 1, 0.3, 1) ${
-              visibleSections.has('about') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
-            }`} style={{ transitionDelay: '0.2s' }}>
+            <p 
+              className="text-xl text-black/60 leading-relaxed mb-12 text-center"
+              style={{ 
+                opacity: Math.min(1, (aboutProgress - 0.3) * 3),
+                transform: `translateY(${(1 - Math.min(1, (aboutProgress - 0.3) * 2)) * 40}px)`,
+              }}
+            >
               En IUDEX estamos cambiando la práctica legal mexicana. Somos un equipo de abogados y programadores definiendo un nuevo estándar en la abogacía moderna.
             </p>
 
-            <div className={`flex flex-col sm:flex-row items-center justify-center gap-4 transition-all duration-500 cubic-bezier(0.16, 1, 0.3, 1) ${
-              visibleSections.has('about') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
-            }`} style={{ transitionDelay: '0.4s' }}>
+            <div 
+              className="flex flex-col sm:flex-row items-center justify-center gap-4"
+              style={{ 
+                opacity: Math.min(1, (aboutProgress - 0.4) * 3),
+                transform: `scale(${0.95 + (Math.min(1, (aboutProgress - 0.4) * 2) * 0.05)}) translateY(${(1 - Math.min(1, (aboutProgress - 0.4) * 2)) * 40}px)`,
+              }}
+            >
               <button
                 onClick={() => setIsDemoModalOpen(true)}
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-10 py-5 bg-black text-white rounded-full text-lg font-medium hover:bg-black/80 transition-all duration-300 group shadow-xl hover:shadow-2xl"
@@ -1704,9 +1817,11 @@ function App() {
         className="relative flex items-center py-16 px-8 md:px-16 bg-[#F9F9F8]"
       >
         <div
-          className={`relative z-10 w-full max-w-7xl mx-auto transition-all duration-500 ${
-            visibleSections.has('faq') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-          }`}
+          className="relative z-10 w-full max-w-7xl mx-auto"
+          style={{ 
+            opacity: Math.min(1, faqProgress * 2),
+            transform: `translateY(${(1 - Math.min(1, faqProgress * 2)) * 30}px)`,
+          }}
         >
           {/* Top Navigation-like labels */}
           <div className="flex justify-between w-full text-[10px] tracking-widest font-bold uppercase mb-20 text-black/90">
@@ -1715,7 +1830,13 @@ function App() {
           </div>
 
           <div className="mb-24 text-center">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-light tracking-tight">
+            <h2 
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-light tracking-tight"
+              style={{ 
+                opacity: Math.min(1, (faqProgress - 0.2) * 3),
+                transform: `translateY(${(1 - Math.min(1, (faqProgress - 0.2) * 2)) * 40}px)`,
+              }}
+            >
               Resolviendo <span className="text-black/50">tus dudas.</span>
             </h2>
           </div>
@@ -1724,10 +1845,11 @@ function App() {
             {faqItems.map((item, index) => (
               <div 
                 key={index} 
-                className={`border-b border-black/10 transition-all duration-500 cubic-bezier(0.16, 1, 0.3, 1) ${
-                  visibleSections.has('faq') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
-                }`}
-                style={{ transitionDelay: `${index * 0.12 + 0.3}s` }}
+                className="border-b border-black/10"
+                style={{ 
+                   opacity: Math.min(1, (faqProgress - 0.3 - (index * 0.1)) * 3),
+                   transform: `translateY(${(1 - Math.min(1, (faqProgress - 0.3 - (index * 0.1)) * 2)) * 30}px)`,
+                }}
               >
                 <button
                   onClick={() => setOpenFAQAccordion(openFAQAccordion === index ? null : index)}
