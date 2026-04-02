@@ -4,6 +4,8 @@ import { ArrowRight, ArrowUpRight, X, Menu, Cookie } from 'lucide-react';
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [isHeaderVisible, setIsHeaderVisible] = useState(true);
+  const lastScrollY = useRef(0);
   
   // Preloader states
   const [loadingProgress, setLoadingProgress] = useState(0);
@@ -54,7 +56,20 @@ function App() {
     const handleScroll = () => {
       cancelAnimationFrame(rafId);
       rafId = requestAnimationFrame(() => {
-        setScrolled(window.scrollY > 50);
+        const currentScrollY = window.scrollY;
+        setScrolled(currentScrollY > 50);
+
+        // Smart dynamic header logic
+        if (currentScrollY > 100) {
+          if (currentScrollY > lastScrollY.current) {
+            setIsHeaderVisible(false); // Hide on scroll down
+          } else {
+            setIsHeaderVisible(true);  // Show on scroll up
+          }
+        } else {
+          setIsHeaderVisible(true); // Always show at the very top
+        }
+        lastScrollY.current = currentScrollY;
 
         if (videoSectionRef.current) {
           const rect = videoSectionRef.current.getBoundingClientRect();
@@ -983,8 +998,14 @@ function App() {
         </div>
       </div>
 
-      {/* Absolute Header with Logo and Menu */}
-      <header className={`absolute top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'bg-white/90 backdrop-blur-md' : 'bg-transparent'} ${introComplete ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+      {/* Fixed Dynamic Header with Logo and Menu */}
+      <header className={`fixed top-0 left-0 right-0 z-50 transition-transform duration-500 ease-out ${scrolled ? 'bg-white/90 backdrop-blur-md shadow-sm' : 'bg-transparent'} ${
+        !introComplete 
+          ? 'opacity-0 pointer-events-none' 
+          : isHeaderVisible 
+            ? 'translate-y-0 opacity-100' 
+            : '-translate-y-full opacity-0'
+      }`}>
         <div className="flex items-center justify-between py-6 relative z-50">
           {/* Logo */}
           <a href="#hero" onClick={() => scrollToSection('hero')} className="flex items-center relative z-50 pl-5 md:pl-8 -ml-[10px] md:ml-0">
