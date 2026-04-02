@@ -1089,9 +1089,9 @@ function App() {
           </div>
         </div>
 
-        {/* Hero Content - absolute bottom anchored, definitively away from top */}
+        {/* Hero Content - absolute bottom anchored */}
         <div 
-          className="absolute bottom-8 md:bottom-14 left-8 md:left-16 w-full max-w-2xl md:max-w-3xl pr-8 text-left pointer-events-none z-10"
+          className="absolute bottom-8 md:bottom-14 left-0 w-full px-8 md:px-16 max-w-4xl text-left pointer-events-none z-10"
           style={{ 
             opacity: startMainAnims ? 1 : 0,
             transition: 'opacity 0.8s ease-out'
