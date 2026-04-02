@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowRight, ArrowUpRight, X, Menu, Cookie } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, X, Menu, Cookie, User } from 'lucide-react';
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -1014,13 +1014,40 @@ function App() {
 
           {/* Right side - Menu */}
           <div className="flex items-center gap-3 relative z-50 pr-5 md:pr-8">
-            {/* Menu Button - Simplified Hamburger */}
+            {/* Desktop "Iniciar Sesion" Button */}
+            <a 
+              href="https://chat.iudex.mx" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className={`hidden md:flex items-center gap-2 px-6 py-2 rounded-[30px] border transition-all duration-300 text-xs uppercase tracking-[0.2em] font-semibold ${
+                menuOpen 
+                  ? 'border-white/20 text-white hover:bg-white hover:text-black' 
+                  : 'border-black/20 text-black hover:bg-black hover:text-white'
+              }`}
+            >
+              <User size={14} />
+              Iniciar Sesión
+            </a>
+
+            {/* Menu Button - Pill on desktop, Icon on mobile */}
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="w-12 h-12 flex items-center justify-center transition-all duration-300 text-black z-[60]"
+              className={`relative z-[60] flex items-center justify-center transition-all duration-300 ${
+                menuOpen 
+                  ? 'text-white md:border-white/20 md:hover:bg-white md:hover:text-black' 
+                  : 'text-black md:border-black/20 md:hover:bg-black md:hover:text-white'
+              } md:border md:px-6 md:py-2 md:rounded-[30px] md:text-xs md:uppercase md:tracking-[0.2em] md:font-semibold`}
               aria-label="Menu"
             >
-              {menuOpen ? <X size={32} className="text-white" /> : <Menu size={32} />}
+              {/* Desktop Text */}
+              <span className="hidden md:block">
+                {menuOpen ? "CERRAR" : "+ CLICK MENU"}
+              </span>
+              
+              {/* Mobile Icon */}
+              <div className="md:hidden w-12 h-12 flex items-center justify-center">
+                {menuOpen ? <X size={32} /> : <Menu size={32} />}
+              </div>
             </button>
           </div>
         </div>
@@ -1064,7 +1091,7 @@ function App() {
           </nav>
 
           <div 
-            className={`mt-16 transition-all duration-700 ${menuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} 
+            className={`md:hidden mt-16 transition-all duration-700 ${menuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} 
             style={{ transitionDelay: '0.8s' }}
           >
             <a
