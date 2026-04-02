@@ -999,7 +999,7 @@ function App() {
       </div>
 
       {/* Fixed Dynamic Header with Logo and Menu */}
-      <header className={`fixed top-0 left-0 right-0 z-50 transition-transform duration-500 ease-out ${scrolled ? 'bg-white/90 backdrop-blur-md shadow-sm' : 'bg-transparent'} ${
+      <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out ${scrolled ? 'bg-white/90 backdrop-blur-md shadow-sm' : 'bg-transparent'} ${
         !introComplete 
           ? 'opacity-0 pointer-events-none' 
           : isHeaderVisible 
