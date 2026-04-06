@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowRight, ArrowUpRight, X, Menu, Cookie, User } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, X, Menu, Cookie, User, Check, ChevronDown } from 'lucide-react';
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -19,6 +19,19 @@ function App() {
   const [showPrivacy, setShowPrivacy] = useState(false);
   const [showTerms, setShowTerms] = useState(false);
   
+  // Form states
+  const [formData, setFormData] = useState({
+    nombre: '',
+    apellidos: '',
+    correo: '',
+    organizacion: 'Despacho',
+    puesto: '',
+    numAbogados: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [formError, setFormError] = useState('');
+  
   // Section progress states
   const [featuresProgress, setFeaturesProgress] = useState(0);
   const [dataProgress, setDataProgress] = useState(0);
@@ -27,6 +40,31 @@ function App() {
   const [impactProgress, setImpactProgress] = useState(0);
   const [aboutProgress, setAboutProgress] = useState(0);
   const [faqProgress, setFaqProgress] = useState(0);
+
+  const handleFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setFormError('');
+    
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      
+      if (response.ok) {
+        setIsSuccess(true);
+      } else {
+        const data = await response.json();
+        setFormError(data.error || 'Hubo un problema al enviar tu solicitud.');
+      }
+    } catch (err) {
+      setFormError('Error de conexión. Por favor intenta más tarde.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
   
   useEffect(() => {
     const consent = localStorage.getItem('iudex-cookies');
@@ -1431,13 +1469,11 @@ function App() {
             {/* Key verb - always black */}
             <span style={{ color: 'black', transition: 'color 1.2s ease' }}>resuelve</span>{" "}
             {/* Filler */}
-            <span style={{ color: featuresProgress > 0.8 ? 'rgba(0,0,0,0.12)' : 'black', transition: 'color 1.2s ease' }}>consultas</span>{" "}
-            <span className="hidden md:inline" style={{ color: featuresProgress > 0.8 ? 'rgba(0,0,0,0.12)' : 'black', transition: 'color 1.2s ease' }}>,</span>{" "}
+            <span style={{ color: featuresProgress > 0.8 ? 'rgba(0,0,0,0.12)' : 'black', transition: 'color 1.2s ease' }}>consultas,</span>{" "}
             {/* Key verb - always black */}
-            <span className="hidden md:inline" style={{ color: 'black', transition: 'color 1.2s ease' }}>aprende</span>{" "}
+            <span style={{ color: 'black', transition: 'color 1.2s ease' }}>aprende</span>{" "}
             {/* Filler */}
-            <span className="hidden md:inline" style={{ color: featuresProgress > 0.8 ? 'rgba(0,0,0,0.12)' : 'black', transition: 'color 1.2s ease' }}>de cada caso y</span>{" "}
-            <span className="md:hidden" style={{ color: 'black', transition: 'color 1.2s ease' }}>y</span>{" "}
+            <span style={{ color: featuresProgress > 0.8 ? 'rgba(0,0,0,0.12)' : 'black', transition: 'color 1.2s ease' }}>de cada caso y</span>{" "}
             {/* Key verb - always black */}
             <span style={{ color: 'black', transition: 'color 1.2s ease' }}>protege</span>{" "}
             {/* Filler */}
@@ -2086,56 +2122,128 @@ function App() {
             <div className="mb-10 text-center md:text-left">
               <span className="text-black/30 text-[10px] font-bold tracking-[0.2em] uppercase mb-3 block">Acceso Prioritario</span>
               <h3 className="text-3xl font-light mb-4">Solicitar <span className="text-black/50">Demo</span></h3>
-              <p className="text-black/40 text-sm text-center md:text-left">Completa tus datos y nos pondremos en contacto.</p>
+              {!isSuccess && <p className="text-black/40 text-sm text-center md:text-left">Completa tus datos y nos pondremos en contacto.</p>}
             </div>
 
-            <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-black/40 uppercase tracking-widest pl-1">Nombre (s)</label>
-                  <input type="text" className="w-full bg-neutral-50 border border-neutral-100 rounded-2xl px-5 py-4 text-sm outline-none focus:border-black/20 focus:bg-white transition-all" placeholder="Ej. Juan" />
+            {isSuccess ? (
+              <div className="py-12 text-center animate-in fade-in zoom-in duration-500">
+                <div className="w-16 h-16 bg-black text-white rounded-full flex items-center justify-center mx-auto mb-6">
+                  <Check size={32} />
                 </div>
-                <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-black/40 uppercase tracking-widest pl-1">Apellidos</label>
-                  <input type="text" className="w-full bg-neutral-50 border border-neutral-100 rounded-2xl px-5 py-4 text-sm outline-none focus:border-black/20 focus:bg-white transition-all" placeholder="Ej. Pérez" />
+                <h4 className="text-2xl font-light mb-4">¡Solicitud Enviada!</h4>
+                <p className="text-black/40 text-sm mb-8">Gracias por tu interés. Nuestro equipo se pondrá en contacto contigo muy pronto a través de tu correo electrónico.</p>
+                <button 
+                  onClick={() => setIsDemoModalOpen(false)}
+                  className="px-8 py-3 bg-neutral-100 text-black rounded-xl text-xs font-bold tracking-widest uppercase hover:bg-neutral-200 transition-all"
+                >
+                  Cerrar
+                </button>
+              </div>
+            ) : (
+              <form className="space-y-6" onSubmit={handleFormSubmit}>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-bold text-black/40 uppercase tracking-widest pl-1">Nombre (s)</label>
+                    <input 
+                      required
+                      type="text" 
+                      className="w-full bg-neutral-50 border border-neutral-100 rounded-2xl px-5 py-4 text-sm outline-none focus:border-black/20 focus:bg-white transition-all" 
+                      placeholder="Ej. Juan" 
+                      value={formData.nombre}
+                      onChange={(e) => setFormData({...formData, nombre: e.target.value})}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-bold text-black/40 uppercase tracking-widest pl-1">Apellidos</label>
+                    <input 
+                      required
+                      type="text" 
+                      className="w-full bg-neutral-50 border border-neutral-100 rounded-2xl px-5 py-4 text-sm outline-none focus:border-black/20 focus:bg-white transition-all" 
+                      placeholder="Ej. Pérez" 
+                      value={formData.apellidos}
+                      onChange={(e) => setFormData({...formData, apellidos: e.target.value})}
+                    />
+                  </div>
                 </div>
-              </div>
 
-              <div className="space-y-2">
-                <label className="text-[10px] font-bold text-black/40 uppercase tracking-widest pl-1">Correo electrónico</label>
-                <input type="email" className="w-full bg-neutral-50 border border-neutral-100 rounded-2xl px-5 py-4 text-sm outline-none focus:border-black/20 focus:bg-white transition-all" placeholder="juan@despacho.com" />
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-black/40 uppercase tracking-widest pl-1">Organización</label>
-                  <select className="w-full bg-neutral-50 border border-neutral-100 rounded-2xl px-5 py-4 text-sm outline-none focus:border-black/20 focus:bg-white transition-all appearance-none cursor-pointer">
-                    <option>Despacho</option>
-                    <option>Empresa</option>
-                    <option>Gobierno</option>
-                  </select>
+                  <label className="text-[10px] font-bold text-black/40 uppercase tracking-widest pl-1">Correo electrónico</label>
+                  <input 
+                    required
+                    type="email" 
+                    className="w-full bg-neutral-50 border border-neutral-100 rounded-2xl px-5 py-4 text-sm outline-none focus:border-black/20 focus:bg-white transition-all" 
+                    placeholder="juan@despacho.com" 
+                    value={formData.correo}
+                    onChange={(e) => setFormData({...formData, correo: e.target.value})}
+                  />
                 </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-bold text-black/40 uppercase tracking-widest pl-1">Organización</label>
+                    <div className="relative">
+                      <select 
+                        className="w-full bg-neutral-50 border border-neutral-100 rounded-2xl px-5 py-4 text-sm outline-none focus:border-black/20 focus:bg-white transition-all appearance-none cursor-pointer"
+                        value={formData.organizacion}
+                        onChange={(e) => setFormData({...formData, organizacion: e.target.value})}
+                      >
+                        <option>Despacho</option>
+                        <option>Empresa</option>
+                        <option>Gobierno</option>
+                      </select>
+                      <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-black/20">
+                        <ChevronDown size={14} />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-bold text-black/40 uppercase tracking-widest pl-1">Puesto</label>
+                    <input 
+                      required
+                      type="text" 
+                      className="w-full bg-neutral-50 border border-neutral-100 rounded-2xl px-5 py-4 text-sm outline-none focus:border-black/20 focus:bg-white transition-all" 
+                      placeholder="Socio, Titular, etc." 
+                      value={formData.puesto}
+                      onChange={(e) => setFormData({...formData, puesto: e.target.value})}
+                    />
+                  </div>
+                </div>
+
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-black/40 uppercase tracking-widest pl-1">Puesto</label>
-                  <input type="text" className="w-full bg-neutral-50 border border-neutral-100 rounded-2xl px-5 py-4 text-sm outline-none focus:border-black/20 focus:bg-white transition-all" placeholder="Socio, Titular, etc." />
+                  <label className="text-[10px] font-bold text-black/40 uppercase tracking-widest pl-1">Número de abogados</label>
+                  <input 
+                    required
+                    type="number" 
+                    className="w-full bg-neutral-50 border border-neutral-100 rounded-2xl px-5 py-4 text-sm outline-none focus:border-black/20 focus:bg-white transition-all" 
+                    placeholder="Ej. 15" 
+                    value={formData.numAbogados}
+                    onChange={(e) => setFormData({...formData, numAbogados: e.target.value})}
+                  />
                 </div>
-              </div>
 
-              <div className="space-y-2">
-                <label className="text-[10px] font-bold text-black/40 uppercase tracking-widest pl-1">Número de abogados</label>
-                <input type="number" className="w-full bg-neutral-50 border border-neutral-100 rounded-2xl px-5 py-4 text-sm outline-none focus:border-black/20 focus:bg-white transition-all" placeholder="Ej. 15" />
-              </div>
+                {formError && (
+                  <p className="text-red-500 text-[11px] font-bold tracking-tight text-center">{formError}</p>
+                )}
 
-              <button className="w-full bg-black text-white py-5 rounded-2xl font-bold tracking-widest text-xs uppercase shadow-xl hover:bg-neutral-800 transition-all hover:scale-[1.01] active:scale-[0.99] mt-4">
-                Enviar Solicitud
-              </button>
+                <button 
+                  disabled={isSubmitting}
+                  className="w-full bg-black text-white py-5 rounded-2xl font-bold tracking-widest text-xs uppercase shadow-xl hover:bg-neutral-800 transition-all hover:scale-[1.01] active:scale-[0.99] mt-4 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                      Enviando...
+                    </>
+                  ) : 'Enviar Solicitud'}
+                </button>
 
-              <div className="pt-6 border-t border-neutral-100 mt-8">
-                <p className="text-[10px] text-black/30 leading-relaxed text-center">
-                  IUDEX utiliza tu información para entregarte el servicio solicitado. También podemos enviarte correos con información comercial; puedes cancelar tu suscripción en cualquier momento usando el enlace incluido en nuestros mensajes. Consulta los detalles en nuestro <button type="button" onClick={() => { setIsDemoModalOpen(false); setShowPrivacy(true); }} className="underline hover:text-black transition-colors">Aviso de Privacidad</button> y <button type="button" onClick={() => { setIsDemoModalOpen(false); setShowTerms(true); }} className="underline hover:text-black transition-colors">Términos y Condiciones</button>.
-                </p>
-              </div>
-            </form>
+                <div className="pt-6 border-t border-neutral-100 mt-8">
+                  <p className="text-[10px] text-black/30 leading-relaxed text-center">
+                    IUDEX utiliza tu información para entregarte el servicio solicitado. También podemos enviarte correos con información comercial; puedes cancelar tu suscripción en cualquier momento usando el enlace incluido en nuestros mensajes. Consulta los detalles en nuestro <button type="button" onClick={() => { setIsDemoModalOpen(false); setShowPrivacy(true); }} className="underline hover:text-black transition-colors">Aviso de Privacidad</button> y <button type="button" onClick={() => { setIsDemoModalOpen(false); setShowTerms(true); }} className="underline hover:text-black transition-colors">Términos y Condiciones</button>.
+                  </p>
+                </div>
+              </form>
+            )}
           </div>
         </div>
       )}
