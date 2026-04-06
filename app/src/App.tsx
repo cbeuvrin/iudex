@@ -1130,7 +1130,7 @@ function App() {
             transition: 'transform 6s cubic-bezier(0.16, 1, 0.3, 1), opacity 1.5s ease-out, filter 3s ease-out',
             transform: `translate(-50%, -50%) ${
               startMainAnims 
-                ? (windowWidth < 1024 ? `translateY(-22vh) scale(${windowWidth < 768 ? 1.4 : 1.8})` : 'translateX(20vw) scale(1)') 
+                ? (windowWidth < 1024 ? `translateY(-22vh) scale(${windowWidth < 768 ? 1.4 : 1.5})` : 'translateX(20vw) scale(1)') 
                 : 'translateX(0) scale(3.5)'
             }`,
             opacity: startMainAnims ? 0.9 : 0,
