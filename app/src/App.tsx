@@ -1172,97 +1172,68 @@ function App() {
         ref={heroRef}
         className="relative min-h-screen bg-white"
       >
-        {/* Central Hero Shape - ID Large with Multi-stage Cinematic Transition */}
-        <div 
-          className="absolute left-1/2 top-1/2 pointer-events-none transform z-0"
-          style={{ 
-            transition: 'transform 6s cubic-bezier(0.16, 1, 0.3, 1), opacity 1.5s ease-out, filter 3s ease-out',
-            transform: `translate(-50%, -50%) ${
-              startMainAnims 
-                ? (windowWidth < 1024 ? `translateY(-22vh) scale(${windowWidth < 768 ? 1.4 : 1.5})` : 'translateX(20vw) scale(1)') 
-                : 'translateX(0) scale(3.5)'
-            }`,
-            opacity: startMainAnims ? 0.9 : 0,
-            filter: startMainAnims ? 'blur(0px)' : 'blur(40px)'
-          }}
-        >
-          <div className={windowWidth < 1024 ? "" : "floating"}>
-            <img
-              src="/images/hero-shape.png"
-              alt="IUDEX"
-              className="w-full h-auto"
-              fetchPriority="high"
-            />
-          </div>
-        </div>
-
-        {/* Hero Content - absolute bottom anchored */}
-        <div 
-          className="absolute bottom-8 md:bottom-14 left-0 w-full px-8 md:px-16 max-w-4xl text-left pointer-events-none z-10"
-          style={{ 
-            opacity: startMainAnims ? 1 : 0,
-            transition: 'opacity 0.8s ease-out'
-          }}
-        >
-          {/* Badge */}
-          <div 
-            style={{
-              opacity: startMainAnims ? 1 : 0,
-              transform: startMainAnims ? 'translateY(0px)' : 'translateY(16px)',
-              transition: 'opacity 1.0s ease-out, transform 1.0s ease-out',
-              transitionDelay: '200ms'
-            }}
-            className="flex items-center justify-start gap-3 mb-8"
-          >
-            <div className="hidden md:block w-8 h-[1px] bg-black/40" />
-            <span className="text-black/50 text-xs tracking-[0.2em] uppercase">Inteligencia Artificial</span>
-          </div>
-
-          <h1 className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-light tracking-tight mb-12">
+        {/* Unified Hero Container with Grid for absolute responsiveness */}
+        <div className="relative w-full min-h-screen px-8 md:px-16 flex items-center justify-center pt-20">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 xl:gap-24 items-center w-full max-w-[1440px] mx-auto">
+            
+            {/* Left: Text Content */}
             <div 
-              style={{
+              className="relative z-10 text-center lg:text-left order-2 lg:order-1"
+              style={{ 
                 opacity: startMainAnims ? 1 : 0,
-                transform: startMainAnims ? 'translateY(0px)' : 'translateY(20px)',
-                transition: 'opacity 1.2s ease-out, transform 1.2s ease-out',
-                transitionDelay: '400ms'
+                transform: startMainAnims ? 'translateX(0)' : 'translateX(-30px)',
+                transition: 'opacity 1s ease-out, transform 1s ease-out'
               }}
             >
-              <span className="block">Diseñado para</span>
-            </div>
-            <div 
-              style={{
-                opacity: startMainAnims ? 1 : 0,
-                transform: startMainAnims ? 'translateY(0px)' : 'translateY(20px)',
-                transition: 'opacity 1.2s ease-out, transform 1.2s ease-out',
-                transitionDelay: '600ms'
-              }}
-            >
-              <span className="block text-black/50">profesionales del derecho.</span>
-            </div>
-          </h1>
-
-          <div
-            style={{
-              opacity: startMainAnims ? 1 : 0,
-              transform: startMainAnims ? 'translateY(0px)' : 'translateY(16px)',
-              transition: 'opacity 1.0s ease-out, transform 1.0s ease-out',
-              transitionDelay: '800ms'
-            }}
-          >
-            <div className="flex flex-col items-center md:items-start">
-              <p className="text-sm md:text-base text-black/60 leading-relaxed max-w-lg mb-10 mx-auto md:mx-0">
-                La única IA legal que entiende el derecho mexicano. Entrenamos nuestro modelo 
-                para ajustarse a la tradición jurídica romano-canónica con criterio jurídico 
-                y sustento legal.
-              </p>
-              
-              <button
-                onClick={() => setIsDemoModalOpen(true)}
-                className="pointer-events-auto inline-flex items-center gap-3 px-6 py-3 md:px-8 md:py-4 bg-black text-white rounded-full text-xs font-semibold hover:bg-neutral-800 transition-all shadow-[0_20px_40px_-12px_rgba(0,0,0,0.3)] hover:shadow-[0_30px_60px_-12px_rgba(0,0,0,0.4)] active:scale-95 uppercase tracking-[0.2em]"
+              {/* Badge */}
+              <div 
+                className="flex items-center justify-center lg:justify-start gap-3 mb-8"
               >
-                Solicitar Demo
-                <ArrowRight size={16} />
-              </button>
+                <div className="hidden md:block w-8 h-[1px] bg-black/40" />
+                <span className="text-black/50 text-[10px] sm:text-xs tracking-[0.2em] uppercase">Inteligencia Artificial</span>
+              </div>
+
+              <h1 className="text-4xl sm:text-6xl md:text-7xl xl:text-[7.5vw] 2xl:text-[9rem] font-light leading-[0.95] tracking-[-0.03em] mb-12">
+                <span className="block">Diseñado para</span>
+                <span className="block text-black/50">profesionales del derecho.</span>
+              </h1>
+
+              <div className="flex flex-col items-center lg:items-start max-w-lg mx-auto lg:mx-0">
+                <p className="text-sm md:text-base text-black/60 leading-relaxed mb-10">
+                  La única IA legal que entiende el derecho mexicano. Entrenamos nuestro modelo 
+                  para ajustarse a la tradición jurídica romano-canónica con criterio jurídico 
+                  y sustento legal.
+                </p>
+                
+                <button
+                  onClick={() => setIsDemoModalOpen(true)}
+                  className="pointer-events-auto inline-flex items-center gap-3 px-6 py-3.5 md:px-8 md:py-4 bg-black text-white rounded-full text-xs font-semibold hover:bg-neutral-800 transition-all shadow-xl hover:shadow-2xl active:scale-95 uppercase tracking-[0.2em]"
+                >
+                  Solicitar Demo
+                  <ArrowRight size={16} />
+                </button>
+              </div>
+            </div>
+
+            {/* Right: ID Shape (Logo) */}
+            <div 
+              className="relative flex items-center justify-center order-1 lg:order-2"
+              style={{ 
+                opacity: startMainAnims ? 0.9 : 0,
+                transition: 'opacity 1.5s ease-out, transform 1s cubic-bezier(0.16, 1, 0.3, 1)',
+                transform: startMainAnims ? 'scale(1)' : 'scale(1.5)'
+              }}
+            >
+              <div className={windowWidth < 1024 ? "" : "floating"}>
+                <img
+                  src="/images/hero-shape.png"
+                  alt="IUDEX"
+                  className="w-full max-w-[300px] md:max-w-[450px] lg:max-w-none h-auto pointer-events-none"
+                  style={{
+                    scale: windowWidth >= 1024 && windowWidth < 1440 ? '1.1' : (windowWidth >= 1440 ? '1.3' : '1')
+                  }}
+                />
+              </div>
             </div>
           </div>
         </div>
