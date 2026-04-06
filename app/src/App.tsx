@@ -47,20 +47,31 @@ function App() {
     setFormError('');
     
     try {
-      const response = await fetch('/api/contact', {
+      // Intentamos primero la ruta estándar de Vercel
+      let response = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
+
+      // Si da 404, probamos la ruta con /app por si Vercel está tomando la raíz real
+      if (response.status === 404) {
+        response = await fetch('/app/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData),
+        });
+      }
       
       if (response.ok) {
         setIsSuccess(true);
       } else {
-        const data = await response.json();
-        setFormError(data.error || 'Hubo un problema al enviar tu solicitud.');
+        const data = await response.json().catch(() => ({}));
+        setFormError(data.error || `Error del servidor (${response.status}).`);
       }
     } catch (err) {
-      setFormError('Error de conexión. Por favor intenta más tarde.');
+      console.error("Error enviando el formulario:", err);
+      setFormError('Hubo un error de conexión con el servidor. Verifica tu internet o el despliegue.');
     } finally {
       setIsSubmitting(false);
     }
