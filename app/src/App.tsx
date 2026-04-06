@@ -1431,11 +1431,13 @@ function App() {
             {/* Key verb - always black */}
             <span style={{ color: 'black', transition: 'color 1.2s ease' }}>resuelve</span>{" "}
             {/* Filler */}
-            <span style={{ color: featuresProgress > 0.8 ? 'rgba(0,0,0,0.12)' : 'black', transition: 'color 1.2s ease' }}>consultas,</span>{" "}
+            <span style={{ color: featuresProgress > 0.8 ? 'rgba(0,0,0,0.12)' : 'black', transition: 'color 1.2s ease' }}>consultas</span>{" "}
+            <span className="hidden md:inline" style={{ color: featuresProgress > 0.8 ? 'rgba(0,0,0,0.12)' : 'black', transition: 'color 1.2s ease' }}>,</span>{" "}
             {/* Key verb - always black */}
-            <span style={{ color: 'black', transition: 'color 1.2s ease' }}>aprende</span>{" "}
+            <span className="hidden md:inline" style={{ color: 'black', transition: 'color 1.2s ease' }}>aprende</span>{" "}
             {/* Filler */}
-            <span style={{ color: featuresProgress > 0.8 ? 'rgba(0,0,0,0.12)' : 'black', transition: 'color 1.2s ease' }}>de cada caso y</span>{" "}
+            <span className="hidden md:inline" style={{ color: featuresProgress > 0.8 ? 'rgba(0,0,0,0.12)' : 'black', transition: 'color 1.2s ease' }}>de cada caso y</span>{" "}
+            <span className="md:hidden" style={{ color: 'black', transition: 'color 1.2s ease' }}>y</span>{" "}
             {/* Key verb - always black */}
             <span style={{ color: 'black', transition: 'color 1.2s ease' }}>protege</span>{" "}
             {/* Filler */}
