@@ -5,21 +5,21 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method === 'POST') {
     const { nombre, apellidos, correo, organizacion, puesto, numAbogados } = req.body;
 
-    // Con transporte de GoDaddy (smtpout.secureserver.net)
+    // Con transporte de GoDaddy (conseguido de Env Vars)
     const transporter = nodemailer.createTransport({
-      host: 'smtpout.secureserver.net',
-      port: 465,
+      host: process.env.SMTP_HOST || 'smtpout.secureserver.net',
+      port: Number(process.env.SMTP_PORT) || 465,
       secure: true, // Use SSL
       auth: {
-        user: 'contacto@iudex.com.mx',
-        pass: 'clientesiudexlegal*', 
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS, 
       },
     });
 
     try {
       await transporter.sendMail({
-        from: '"IUDEX Website" <contacto@iudex.com.mx>',
-        to: 'contacto@iudex.com.mx', // Recibe el equipo de IUDEX
+        from: `"IUDEX Website" <${process.env.SMTP_USER}>`,
+        to: process.env.SMTP_USER, // Recibe el equipo de IUDEX
         subject: `Nueva Solicitud de Demo: ${nombre} ${apellidos}`,
         text: `
           Nueva solicitud de demo desde el sitio web:
