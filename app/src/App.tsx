@@ -1423,7 +1423,7 @@ function App() {
             transform: `translateY(${(1 - Math.min(1, featuresProgress * 1.5)) * 40}px)`,
           }}
         >
-          <h2 className="text-4xl md:text-6xl lg:text-[110px] font-light leading-[1] tracking-tighter text-black w-full text-center md:text-left">
+          <h2 className="text-4xl md:text-6xl lg:text-[110px] font-light leading-[1] tracking-tighter text-black w-full text-left">
             {/* Key verb - always black */}
             <span style={{ color: 'black', transition: 'color 1.2s ease' }}>Redacta</span>{" "}
             {/* Filler - fades out after scroll > 0.8 */}
