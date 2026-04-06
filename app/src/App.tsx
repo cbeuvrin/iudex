@@ -1260,7 +1260,7 @@ function App() {
             {knowledgeItems.map((item, index) => (
               <div 
                 key={index} 
-                className={`py-12 flex flex-col md:flex-row items-start gap-12 ${index !== 0 ? 'border-t border-black/10' : ''}`}
+                className={`py-12 flex flex-col lg:flex-row items-start gap-12 ${index !== 0 ? 'border-t border-black/10' : ''}`}
                 style={{ 
                   borderColor: 'rgba(0,0,0,0.1)',
                   borderTopStyle: 'dashed' 
@@ -1268,14 +1268,14 @@ function App() {
               >
                 {/* Left: Stat — first to appear */}
                 <div 
-                  className="w-full md:w-32 lg:w-48 flex-shrink-0"
+                  className="w-full lg:w-48 flex-shrink-0"
                   style={{ 
                     opacity: Math.min(1, (dataProgress - (index * 0.8)) * 1.5),
                     transform: `translateY(${(1 - Math.min(1, (dataProgress - (index * 0.8)) * 1.2)) * 20}px)`,
                     willChange: 'transform, opacity'
                   }}
                 >
-                  <div className="text-6xl md:text-7xl font-bold tracking-tighter mb-1 leading-none">{item.value}</div>
+                  <div className="text-6xl lg:text-7xl font-bold tracking-tighter mb-1 leading-none">{item.value}</div>
                   <div className="text-[10px] font-bold tracking-[0.1em] uppercase text-black/40">{item.label}</div>
                 </div>
 
@@ -1295,7 +1295,7 @@ function App() {
 
                 {/* Right: Source and Tags — last to arrive */}
                 <div 
-                  className="w-full md:w-64 flex-shrink-0 flex flex-col items-start md:items-end text-left md:text-right"
+                  className="w-full lg:w-64 flex-shrink-0 flex flex-col items-start lg:items-end text-left lg:text-right"
                   style={{ 
                     opacity: Math.min(1, (dataProgress - (index * 0.8) - 0.3) * 1.5),
                     transform: `translateY(${(1 - Math.min(1, (dataProgress - (index * 0.8) - 0.3) * 1.2)) * 20}px)`,
@@ -1307,7 +1307,7 @@ function App() {
                     <div className="text-xs text-black/40 font-medium">{item.subSource}</div>
                   </div>
                   
-                  <div className="flex flex-wrap gap-2 justify-start md:justify-end">
+                  <div className="flex flex-wrap gap-2 justify-start lg:justify-end">
                     {item.tags.map((tag, tIdx) => (
                       <span 
                         key={tIdx} 
@@ -1423,7 +1423,7 @@ function App() {
             transform: `translateY(${(1 - Math.min(1, featuresProgress * 1.5)) * 40}px)`,
           }}
         >
-          <h2 className="text-4xl md:text-7xl lg:text-[110px] font-light leading-[1] tracking-tighter text-black w-full text-center md:text-left">
+          <h2 className="text-4xl md:text-6xl lg:text-[110px] font-light leading-[1] tracking-tighter text-black w-full text-center md:text-left">
             {/* Key verb - always black */}
             <span style={{ color: 'black', transition: 'color 1.2s ease' }}>Redacta</span>{" "}
             {/* Filler - fades out after scroll > 0.8 */}
@@ -1581,7 +1581,9 @@ function App() {
               className="w-full lg:w-1/2 flex flex-col items-start text-left"
               style={{ 
                 opacity: Math.min(1, (trackingProgress - 0.2) * 3),
-                transform: `translateX(${(1 - Math.min(1, (trackingProgress - 0.2) * 2)) * -40}px)`,
+                transform: windowWidth < 1024 
+                  ? `translateY(${(1 - Math.min(1, (trackingProgress - 0.2) * 2)) * 40}px)`
+                  : `translateX(${(1 - Math.min(1, (trackingProgress - 0.2) * 2)) * -40}px)`,
               }}
             >
               <div className="inline-flex items-center gap-2 bg-white px-3 py-1.5 rounded-lg border border-black/5 shadow-sm mb-8">
@@ -1622,7 +1624,9 @@ function App() {
               className="w-full lg:w-1/2 flex justify-center lg:justify-end relative mt-8 lg:mt-0"
               style={{ 
                 opacity: Math.min(1, (trackingProgress - 0.3) * 3),
-                transform: `translateX(${(1 - Math.min(1, (trackingProgress - 0.3) * 2)) * 40}px)`,
+                transform: windowWidth < 1024
+                  ? `translateY(${(1 - Math.min(1, (trackingProgress - 0.3) * 2)) * 40}px)`
+                  : `translateX(${(1 - Math.min(1, (trackingProgress - 0.3) * 2)) * 40}px)`,
               }}
             >
               {/* Static ID Shape — hidden on mobile */}
