@@ -5,6 +5,7 @@ function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [isHeaderVisible, setIsHeaderVisible] = useState(true);
+  const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
   const lastScrollY = useRef(0);
   
   // Preloader states
@@ -128,6 +129,13 @@ function App() {
       window.removeEventListener('scroll', handleScroll);
       cancelAnimationFrame(rafId);
     };
+  }, []);
+
+  // Window resize listener
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   // Cinematic preloader - shows once per browser session
@@ -1007,13 +1015,15 @@ function App() {
             : '-translate-y-full opacity-0'
       }`}>
         <div className="flex items-center justify-between py-6 relative z-50">
-          {/* Logo */}
-          <a href="#hero" onClick={() => scrollToSection('hero')} className="flex items-center relative z-50 pl-5 md:pl-8 -ml-[10px] md:ml-0">
-            <img src="/images/logo.png" alt="IUDEX" className="h-14 w-auto" />
-          </a>
+          {/* Logo - Aligned Left as mobile/desktop */}
+          <div className="flex items-center relative z-50 pl-5 md:pl-8 -ml-[10px] md:ml-0 transition-all duration-500">
+            <a href="#hero" onClick={() => scrollToSection('hero')}>
+              <img src="/images/logo.png" alt="IUDEX" className="h-14 w-auto" />
+            </a>
+          </div>
 
           {/* Right side - Menu */}
-          <div className="flex items-center gap-3 relative z-50 pr-5 md:pr-8">
+          <div className="flex items-center gap-3 relative z-50 ml-auto pr-5 md:pr-8">
             {/* Desktop "Iniciar Sesion" Button */}
             <a 
               href="https://chat.iudex.mx" 
@@ -1120,14 +1130,14 @@ function App() {
             transition: 'transform 6s cubic-bezier(0.16, 1, 0.3, 1), opacity 1.5s ease-out, filter 3s ease-out',
             transform: `translate(-50%, -50%) ${
               startMainAnims 
-                ? (window.innerWidth < 768 ? 'translateY(-22vh) scale(1.4)' : 'translateX(20vw) scale(1)') 
+                ? (windowWidth < 1024 ? `translateY(-22vh) scale(${windowWidth < 768 ? 1.4 : 1.8})` : 'translateX(20vw) scale(1)') 
                 : 'translateX(0) scale(3.5)'
             }`,
             opacity: startMainAnims ? 0.9 : 0,
             filter: startMainAnims ? 'blur(0px)' : 'blur(40px)'
           }}
         >
-          <div className={window.innerWidth < 768 ? "" : "floating"}>
+          <div className={windowWidth < 1024 ? "" : "floating"}>
             <img
               src="/images/hero-shape.png"
               alt="IUDEX"
