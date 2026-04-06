@@ -1258,7 +1258,7 @@ function App() {
               
               <button
                 onClick={() => setIsDemoModalOpen(true)}
-                className="pointer-events-auto inline-flex items-center gap-3 px-8 py-4 bg-black text-white rounded-full text-xs font-semibold hover:bg-neutral-800 transition-all shadow-[0_20px_40px_-12px_rgba(0,0,0,0.3)] hover:shadow-[0_30px_60px_-12px_rgba(0,0,0,0.4)] active:scale-95 uppercase tracking-[0.2em]"
+                className="pointer-events-auto inline-flex items-center gap-3 px-6 py-3 md:px-8 md:py-4 bg-black text-white rounded-full text-xs font-semibold hover:bg-neutral-800 transition-all shadow-[0_20px_40px_-12px_rgba(0,0,0,0.3)] hover:shadow-[0_30px_60px_-12px_rgba(0,0,0,0.4)] active:scale-95 uppercase tracking-[0.2em]"
               >
                 Solicitar Demo
                 <ArrowRight size={16} />
