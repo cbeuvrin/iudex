@@ -1193,9 +1193,10 @@ function App() {
                 <span className="text-black/50 text-[10px] sm:text-xs tracking-[0.2em] uppercase">Inteligencia Artificial</span>
               </div>
 
-              <h1 className="text-4xl sm:text-6xl md:text-7xl xl:text-[7.5vw] 2xl:text-[9rem] font-light leading-[0.95] tracking-[-0.03em] mb-12">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[clamp(3.5rem,5.5vw,7.5rem)] font-light leading-[1.05] tracking-[-0.03em] mb-12">
                 <span className="block">Diseñado para</span>
-                <span className="block text-black/50">profesionales del derecho.</span>
+                <span className="block text-black/40">profesionales del</span>
+                <span className="block text-black/40">derecho.</span>
               </h1>
 
               <div className="flex flex-col items-center lg:items-start max-w-lg mx-auto lg:mx-0">
