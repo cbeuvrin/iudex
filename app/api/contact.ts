@@ -18,9 +18,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     try {
       await transporter.sendMail({
-        from: `"IUDEX Website" <${process.env.SMTP_USER}>`,
+        from: `"IUDEX Landing - ${nombre} ${apellidos}" <${process.env.SMTP_USER}>`,
         to: process.env.SMTP_USER, // Recibe el equipo de IUDEX
-        subject: `Nueva Solicitud de Demo: ${nombre} ${apellidos}`,
+        replyTo: correo, // Importante: al darle a responder, le contestas al cliente
+        subject: `Nueva Solicitud de Demo: ${organizacion}`,
         text: `
           Nueva solicitud de demo desde el sitio web:
           
