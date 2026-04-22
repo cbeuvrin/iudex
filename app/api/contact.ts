@@ -1,36 +1,19 @@
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+
+// Inicializar Resend con la API Key de las variables de entorno
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method === 'POST') {
     const { nombre, apellidos, correo, organizacion, puesto, numAbogados } = req.body;
 
-    // Con transporte de GoDaddy (conseguido de Env Vars)
-    const transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST || 'smtpout.secureserver.net',
-      port: Number(process.env.SMTP_PORT) || 465,
-      secure: true, // Use SSL
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS, 
-      },
-    });
-
     try {
-      await transporter.sendMail({
-        from: `"IUDEX Landing - ${nombre} ${apellidos}" <${process.env.SMTP_USER}>`,
-        to: process.env.SMTP_USER, // Recibe el equipo de IUDEX
-        replyTo: correo, // Importante: al darle a responder, le contestas al cliente
+      const { data, error } = await resend.emails.send({
+        from: process.env.RESEND_FROM || 'onboarding@resend.dev',
+        to: [process.env.RESEND_TO || 'info@iudex.ai'],
+        replyTo: correo,
         subject: `Nueva Solicitud de Demo: ${organizacion}`,
-        text: `
-          Nueva solicitud de demo desde el sitio web:
-          
-          Nombre Completo: ${nombre} ${apellidos}
-          Email: ${correo}
-          Organización: ${organizacion}
-          Puesto: ${puesto}
-          Número de Abogados: ${numAbogados}
-        `,
         html: `
           <div style="font-family: sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
             <h2 style="color: #333;">Nueva Solicitud de Demo</h2>
@@ -43,8 +26,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         `,
       });
 
-      return res.status(200).json({ message: 'Email enviado con éxito' });
-    } catch (error) {
+      if (error) {
+        console.error('Error de Resend:', error);
+        return res.status(400).json({ error: error.message || 'Error en el servicio de correo' });
+      }
+
+      return res.status(200).json({ 
+        message: 'Email enviado con éxito',
+        id: data?.id 
+      });
+    } catch (error: any) {
       console.error('Error enviando email:', error);
       return res.status(500).json({ error: 'Hubo un error al enviar el email' });
     }
